@@ -7,7 +7,7 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a48267d8-f883-48f9-a7e2-972ef0e13d86" name="Default" comment="" />
@@ -40,19 +40,14 @@
       <file leaf-file-name="QcmListActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/QcmListActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7264368">
-              <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CategoryCursorAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryCursorAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="41" selection-end-column="64" />
-              <folding />
+            <state vertical-scroll-proportion="0.45057473">
+              <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+              <folding>
+                <element signature="e#1390#1421#0" expanded="true" />
+                <element signature="e#1423#1455#0" expanded="true" />
+                <element signature="e#3601#3602#0" expanded="true" />
+                <element signature="e#3651#3652#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -75,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryListActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="39" column="50" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
+              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
                 <element signature="e#4802#5296#0" expanded="true" />
                 <element signature="e#5295#5296#0" expanded="true" />
@@ -88,8 +83,11 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/ConnexionActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="115" column="8" selection-start-line="115" selection-start-column="8" selection-end-line="115" selection-end-column="8" />
-              <folding />
+              <caret line="87" column="38" selection-start-line="87" selection-start-column="38" selection-end-line="87" selection-end-column="38" />
+              <folding>
+                <element signature="e#3795#5099#0" expanded="true" />
+                <element signature="e#5098#5099#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -97,8 +95,8 @@
       <file leaf-file-name="row_category.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/row_category.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="-5.275862">
+              <caret line="9" column="38" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -1721,9 +1719,11 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_qcm_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/row_qcm.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/content_qcm_list.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/ConnexionActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryListActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/QcmCursorAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/ConnexionActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/row_category.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryCursorAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/QcmListActivity.java" />
       </list>
     </option>
@@ -2110,7 +2110,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39863715" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2124,7 +2124,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -2169,17 +2171,6 @@
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/row_category.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
         <state />
       </provider>
     </entry>
@@ -2230,26 +2221,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/ConnexionActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="115" column="8" selection-start-line="115" selection-start-column="8" selection-end-line="115" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/data/QcmSQLiteAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryCursorAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="41" selection-end-column="64" />
           <folding />
         </state>
       </provider>
@@ -2266,10 +2241,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/ConnexionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="87" column="38" selection-start-line="87" selection-start-column="38" selection-end-line="87" selection-end-column="38" />
+          <folding>
+            <element signature="e#3795#5099#0" expanded="true" />
+            <element signature="e#5098#5099#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/row_category.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.275862">
+          <caret line="9" column="38" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryCursorAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5816092">
+          <caret line="39" column="10" selection-start-line="39" selection-start-column="10" selection-end-line="39" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/CategoryListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="50" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
+          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding>
             <element signature="e#4802#5296#0" expanded="true" />
             <element signature="e#5295#5296#0" expanded="true" />
@@ -2279,9 +2284,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/iia/myqcm/view/QcmListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7264368">
-          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.45057473">
+          <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+          <folding>
+            <element signature="e#1390#1421#0" expanded="true" />
+            <element signature="e#1423#1455#0" expanded="true" />
+            <element signature="e#3601#3602#0" expanded="true" />
+            <element signature="e#3651#3652#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

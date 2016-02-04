@@ -37,7 +37,7 @@ public class CategoryCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tvName = (TextView)view.findViewById(R.id.tvName);
-        TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
+        //TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
 
         Category c = CategorySQLiteAdapter.cursorToItem(cursor);
 

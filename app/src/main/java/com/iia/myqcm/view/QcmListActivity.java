@@ -2,6 +2,7 @@ package com.iia.myqcm.view;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.iia.myqcm.R;
@@ -39,19 +41,7 @@ public class QcmListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Bundle bundle = this.getIntent().getExtras();
-        long categoryId = bundle.getLong(CategoryListActivity.CATEGORY_ID);
-
-        QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(this);
-        qcmSQLiteAdapter.open();
-
-        Cursor c = qcmSQLiteAdapter.getAllCursorByCategory(categoryId);
-
-        QcmCursorAdapter adapter = new QcmCursorAdapter(this, c, 0);
-
-        ListView qcmList = (ListView) this.findViewById(R.id.qcmsList);
-        qcmList.setAdapter(adapter);
-
+        new LoadTask(this).execute();
     }
 
     @Override
@@ -109,5 +99,51 @@ public class QcmListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public class LoadTask extends AsyncTask<Void, Void, Cursor> {
+
+        private QcmListActivity ctx;
+
+        public LoadTask(QcmListActivity qcmListActivity) {
+            this.ctx = qcmListActivity;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Cursor doInBackground(Void... params) {
+            QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(this.ctx);
+            qcmSQLiteAdapter.open();
+
+            Bundle bundle = this.ctx.getIntent().getExtras();
+            long categoryId = bundle.getLong(CategoryListActivity.CATEGORY_ID);
+
+            return qcmSQLiteAdapter.getAllCursorByCategory(categoryId);
+        }
+
+        @Override
+        protected void onPostExecute(Cursor result) {
+            QcmCursorAdapter adapter = new QcmCursorAdapter(this.ctx, result, 0);
+
+            ListView qcmList = (ListView) this.ctx.findViewById(R.id.qcmsList);
+            qcmList.setAdapter(adapter);
+
+            /*categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(CATEGORY_ID, id);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });*/
+
+            super.onPostExecute(result);
+        }
     }
 }

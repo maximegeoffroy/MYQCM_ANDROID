@@ -87,14 +87,23 @@ public class ConnexionActivity extends AppCompatActivity {
 
         categorySQLiteAdapter.close();
 
+        CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this);
+        categorySQLiteAdapter.open();
+
+        Category c = categorySQLiteAdapter.getCategory(2);
+
+        categorySQLiteAdapter.close();
+
         QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(this);
         qcmSQLiteAdapter.open();
 
+        Date d = new Date();
+
         Qcm qcm = new Qcm();
-        qcm.setName("QCM 1");
+        qcm.setName("QCM 3");
         qcm.setStart_date(d);
         qcm.setEnd_date(d);
-        qcm.setDuration(50);
+        qcm.setDuration(120);
         qcm.setCreated_at(d);
         qcm.setUpdated_at(d);
         qcm.setCategory(c);
@@ -109,7 +118,7 @@ public class ConnexionActivity extends AppCompatActivity {
         qcm1.setCategory(c1);
 
         qcmSQLiteAdapter.insert(qcm);
-        qcmSQLiteAdapter.insert(qcm1);
+        qcmSQLiteAdapter.insert(qcm);
 
         qcmSQLiteAdapter.close();*/
 
