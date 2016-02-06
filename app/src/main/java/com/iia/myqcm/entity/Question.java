@@ -3,83 +3,72 @@ package com.iia.myqcm.entity;
 import java.util.Date;
 
 /**
- * Created by gemax on 01/02/2016.
+ * Created by gemax on 06/02/2016.
  */
-public class Category {
-
+public class Question {
     /*
-        Category id
+        Question id
     */
     protected long id;
 
     /*
-        Category name
+        Question content
      */
-    protected String name;
+    protected String content;
 
     /*
-        Category created_at
+        Question created_at
      */
     protected Date created_at;
 
     /*
-        Category updated_at
+        Question updated_at
      */
     protected Date updated_at;
 
     /*
-        Get id
-     */
+        Question qcm
+    */
+    protected  Qcm qcm;
+
+
     public long getId() {
         return id;
     }
 
-    /*
-        Set id
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /*
-        Get name
-     */
-    public String getName() {
-        return name;
+    public String getContent() {
+        return content;
     }
 
-    /*
-        Set name
-     */
-    public void setName(String name) {
-        this.name = name;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    /*
-        Get created_at
-     */
     public Date getCreated_at() {
         return created_at;
     }
 
-    /*
-        Set created_at
-     */
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
-    /*
-        Get updated_at
-     */
     public Date getUpdated_at() {
         return updated_at;
     }
 
-    /*
-        Set updated_at
-     */
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Qcm getQcm() {
+        return qcm;
+    }
+
+    public void setQcm(Qcm qcm) {
+        this.qcm = qcm;
     }
 }

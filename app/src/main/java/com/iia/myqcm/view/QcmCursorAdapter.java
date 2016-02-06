@@ -70,8 +70,8 @@ public class QcmCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tvName = (TextView)view.findViewById(R.id.tvNameQcm);
-
-        Qcm q = QcmSQLiteAdapter.cursorToItem(cursor);
+        QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(context);
+        Qcm q = qcmSQLiteAdapter.cursorToItem(cursor);
 
         tvName.setText(q.getName());
     }

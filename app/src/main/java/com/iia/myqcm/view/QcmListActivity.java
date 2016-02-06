@@ -25,6 +25,8 @@ import com.iia.myqcm.data.QcmSQLiteAdapter;
 public class QcmListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String QCM_ID = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,16 +134,16 @@ public class QcmListActivity extends AppCompatActivity
             ListView qcmList = (ListView) this.ctx.findViewById(R.id.qcmsList);
             qcmList.setAdapter(adapter);
 
-            /*categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            qcmList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
+                    Intent intent = new Intent(QcmListActivity.this, QuestionActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(CATEGORY_ID, id);
+                    bundle.putSerializable(QCM_ID, id);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
-            });*/
+            });
 
             super.onPostExecute(result);
         }

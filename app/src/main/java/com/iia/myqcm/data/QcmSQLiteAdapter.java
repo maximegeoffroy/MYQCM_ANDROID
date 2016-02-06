@@ -29,8 +29,10 @@ public class QcmSQLiteAdapter {
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
+    private Context ctx;
 
     public QcmSQLiteAdapter(Context context){
+        this.ctx = context;
         helper = new MyqcmSQLiteOpenHelper(context, MyqcmSQLiteOpenHelper.DB_NAME, null,1);
     }
 
@@ -61,7 +63,7 @@ public class QcmSQLiteAdapter {
 
     public Qcm getQcm(long id){
         //SELECT
-        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT};
+        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
 
         String whereClauses = COL_ID + "= ?";
         String[] whereArgs = {String.valueOf(id)};
@@ -83,7 +85,7 @@ public class QcmSQLiteAdapter {
 
     public Cursor getAllCursor(){
         //SELECT
-        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT};
+        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
 
         Cursor c = db.query(TABLE_QCM, cols,null,null, null, null, null);
 
@@ -92,7 +94,7 @@ public class QcmSQLiteAdapter {
 
     public Cursor getAllCursorByCategory(long categoryId){
         //SELECT
-        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT};
+        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
 
         String whereClauses = COL_CATEGORYID + "= ?";
         String[] whereArgs = {String.valueOf(categoryId)};
@@ -102,43 +104,7 @@ public class QcmSQLiteAdapter {
         return c;
     }
 
-    public ArrayList<Qcm> getAll(){
-        Cursor c = this.getAllCursor();
-
-        ArrayList<Qcm> resultQcms = null;
-
-        if(c.moveToFirst()){
-
-            resultQcms = new ArrayList<Qcm>();
-
-            do {
-                resultQcms.add(this.cursorToItem(c));
-            }while(c.moveToNext());
-        }
-
-        c.close();
-
-        return resultQcms;
-    }
-
-    public long update(Qcm qcm){
-        ContentValues values = this.itemToContentValues(qcm);
-
-        String whereClause = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(qcm.getId())};
-
-        return this.db.update(TABLE_QCM, values, whereClause, whereArgs);
-    }
-
-    public long delete(Qcm qcm){
-        //DELETE
-        String whereClause = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(qcm.getId())};
-
-        return this.db.delete(TABLE_QCM, whereClause, whereArgs);
-    }
-
-    public static Qcm cursorToItem(Cursor c){
+    public Qcm cursorToItem(Cursor c){
         Qcm resultQcm = new Qcm();
 
         resultQcm.setId(c.getInt(c.getColumnIndex(COL_ID)));
@@ -148,7 +114,7 @@ public class QcmSQLiteAdapter {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String dateStartAt = c.getString(c.getColumnIndex(COL_STARTAT));
         try {
-            resultQcm.setCreated_at(dateFormat.parse(dateStartAt));
+            resultQcm.setStart_date(dateFormat.parse(dateStartAt));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -176,6 +142,16 @@ public class QcmSQLiteAdapter {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        //CATEGORIE
+        long categoryId = c.getInt(c.getColumnIndex(COL_CATEGORYID));
+
+        CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this.ctx);
+        categorySQLiteAdapter.open();
+
+        resultQcm.setCategory(categorySQLiteAdapter.getCategory(categoryId));
+
+        categorySQLiteAdapter.close();
 
         return resultQcm;
     }
