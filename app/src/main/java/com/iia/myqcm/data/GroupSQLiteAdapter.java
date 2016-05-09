@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by gemax on 30/01/2016.
  */
-public class GroupSQLiteAdapter {
+public class  GroupSQLiteAdapter {
     public static final String TABLE_GROUP = "groupUser";
     public static final String COL_ID = "_id";
     public static final String COL_NAME = "name";

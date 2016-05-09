@@ -5,36 +5,46 @@ import java.util.Date;
 /**
  * Created by gemax on 06/02/2016.
  */
-public class Question {
+public class Answer {
     /*
-        Question id
+        Answer id
     */
     protected long id;
 
     /*
-        Question content
+        Answer content
      */
     protected String content;
 
     /*
-        Question created_at
+        Answer point
+     */
+    protected int point;
+
+    /*
+        Answer is_valid
+     */
+    protected boolean is_valid;
+
+    /*
+        Answer created_at
      */
     protected Date created_at;
 
     /*
-        Question updated_at
+        Answer updated_at
      */
     protected Date updated_at;
 
     /*
-        Question qcm
-    */
-    protected  Qcm qcm;
+        Answer question
+     */
+    protected Question question;
 
     /*
-        Question idServer
+        Answer idServer
     */
-    protected  long idServer;
+    protected long idServer;
 
 
     public long getId() {
@@ -53,6 +63,22 @@ public class Question {
         this.content = content;
     }
 
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public boolean getIs_valid() {
+        return is_valid;
+    }
+
+    public void setIs_valid(boolean is_valid) {
+        this.is_valid = is_valid;
+    }
+
     public Date getCreated_at() {
         return created_at;
     }
@@ -69,12 +95,12 @@ public class Question {
         this.updated_at = updated_at;
     }
 
-    public Qcm getQcm() {
-        return qcm;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setQcm(Qcm qcm) {
-        this.qcm = qcm;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     public long getIdServer() {

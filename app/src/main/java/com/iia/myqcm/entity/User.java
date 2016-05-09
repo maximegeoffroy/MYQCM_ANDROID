@@ -1,11 +1,13 @@
 package com.iia.myqcm.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by gemax on 30/01/2016.
  */
-public class User {
+public class User implements Serializable {
 
     /*
         User id
@@ -51,6 +53,11 @@ public class User {
         User group
      */
     protected Group group;
+
+    /*
+        User qcms
+     */
+    protected ArrayList<QcmUser> qcmsUser;
 
     /*
         Get id
@@ -179,5 +186,19 @@ public class User {
      */
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    /*
+        Get list qcmuser
+     */
+    public ArrayList<QcmUser> getQcmsUser() {
+        return qcmsUser;
+    }
+
+    /*
+        Set list qcmuser
+     */
+    public void setQcmsUser(ArrayList<QcmUser> qcmUser) {
+        this.qcmsUser = qcmUser;
     }
 }

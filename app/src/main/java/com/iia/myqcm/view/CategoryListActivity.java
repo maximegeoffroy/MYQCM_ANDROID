@@ -23,7 +23,13 @@ import android.widget.Toast;
 
 import com.iia.myqcm.R;
 import com.iia.myqcm.data.CategorySQLiteAdapter;
+import com.iia.myqcm.data.QcmSQLiteAdapter;
+import com.iia.myqcm.data.UserSQLiteAdapter;
 import com.iia.myqcm.entity.Category;
+import com.iia.myqcm.entity.Qcm;
+import com.iia.myqcm.entity.User;
+import com.iia.myqcm.webservice.UserWSAdapter;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,10 +40,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import cz.msebera.android.httpclient.Header;
+
 public class CategoryListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CATEGORY_ID = "id";
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,28 @@ public class CategoryListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+//        long id = (long)getIntent().getSerializableExtra(ConnexionActivity.ID);
+//
+//        UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
+//        userSQLiteAdapter.open();
+//        this.user = userSQLiteAdapter.getUser(id);
+//        userSQLiteAdapter.close();
+
+        final UserWSAdapter userWSAdapter = new UserWSAdapter(this);
+
+        userWSAdapter.getUser("maxy", new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                User item = userWSAdapter.jsonToItem(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(CategoryListActivity.this, "FAIL", Toast.LENGTH_LONG).show();
+            }
+        });
 
         new LoadTask(this).execute();
     }
@@ -98,7 +130,11 @@ public class CategoryListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent i = new Intent(CategoryListActivity.this, ProfileActivity.class);
+            Bundle b = new Bundle();
+            b.putLong(ConnexionActivity.ID,this.user.getId());
+            i.putExtras(b);
+            startActivity(i);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -131,6 +167,7 @@ public class CategoryListActivity extends AppCompatActivity
 
         @Override
         protected Cursor doInBackground(Void... params) {
+
             CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this.ctx);
             categorySQLiteAdapter.open();
 

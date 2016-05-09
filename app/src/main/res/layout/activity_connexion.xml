@@ -15,6 +15,7 @@
         android:layout_above="@+id/EmailLinearLayout"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
+        android:textSize="@dimen/font_size_title"
         android:layout_marginBottom="50dp" />
 
     <LinearLayout

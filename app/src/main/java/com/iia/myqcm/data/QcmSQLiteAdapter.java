@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.iia.myqcm.entity.Qcm;
 
@@ -26,6 +27,7 @@ public class QcmSQLiteAdapter {
     public static final String COL_CREATEDAT = "created_at";
     public static final String COL_UPDATEDAT = "updated_at";
     public static final String COL_CATEGORYID = "category_id";
+    public static final String COL_IDSERVER = "idServer";
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
@@ -44,7 +46,8 @@ public class QcmSQLiteAdapter {
                 + COL_DURATION + " INTEGER NOT NULL,"
                 + COL_CREATEDAT + " DATE NOT NULL,"
                 + COL_UPDATEDAT + " DATE NOT NULL,"
-                + COL_CATEGORYID + " INTEGER NOT NULL);";
+                + COL_CATEGORYID + " INTEGER NOT NULL,"
+                + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
     public void open() {
@@ -56,19 +59,46 @@ public class QcmSQLiteAdapter {
     }
 
     public long insert(Qcm qcm){
+        long id = 0;
+        if(this.getQcm(qcm.getIdServer()) != null){
+            id = this.getQcm(qcm.getIdServer()).getId();
+        }else{
+            id = db.insert(TABLE_QCM, null, this.itemToContentValues(qcm));
+        }
 
-        //INSERT en base de donnees
-        return db.insert(TABLE_QCM, null, this.itemToContentValues(qcm));
+        return id;
     }
 
-    public Qcm getQcm(long id){
+    public Qcm getQcm(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
 
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+        String whereClauses = COL_IDSERVER + "= ?";
+        String[] whereArgs = {String.valueOf(idServer)};
 
         Cursor c = db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
+
+        Qcm resultQcm = null;
+
+        if(c.getCount() > 0){
+            c.moveToFirst();
+
+            resultQcm = this.cursorToItem(c);
+        }
+
+        c.close();
+
+        return resultQcm;
+    }
+
+    public Qcm getQcmByCategory(long idCategory){
+        //SELECT
+        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
+
+        String whereClauses = COL_CATEGORYID + "= ?";
+        String[] whereArgs = {String.valueOf(idCategory)};
+
+        Cursor c = this.db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
 
         Qcm resultQcm = null;
 
@@ -165,6 +195,7 @@ public class QcmSQLiteAdapter {
         values.put(COL_CREATEDAT, qcm.getCreated_at().toString());
         values.put(COL_UPDATEDAT, qcm.getUpdated_at().toString());
         values.put(COL_CATEGORYID, qcm.getCategory().getId());
+        values.put(COL_IDSERVER, qcm.getIdServer());
 
         return values;
     }

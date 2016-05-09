@@ -48,6 +48,11 @@ public class Qcm {
     protected Category category;
 
     /*
+        Qcm idServer
+    */
+    protected long idServer;
+
+    /*
         Get id
      */
     public long getId() {
@@ -157,5 +162,19 @@ public class Qcm {
     */
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    /*
+        Get idServer
+     */
+    public long getIdServer() {
+        return idServer;
+    }
+
+    /*
+        Set idServer
+     */
+    public void setIdServer(long idServer) {
+        this.idServer = idServer;
     }
 }

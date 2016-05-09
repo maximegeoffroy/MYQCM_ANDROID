@@ -25,6 +25,7 @@ public class CategorySQLiteAdapter {
     public static final String COL_NAME = "name";
     public static final String COL_CREATEDAT = "created_at";
     public static final String COL_UPDATEDAT = "updated_at";
+    public static final String COL_IDSERVER = "idServer";
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
@@ -40,7 +41,8 @@ public class CategorySQLiteAdapter {
         return "CREATE TABLE "+ TABLE_CATEGORY + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_NAME + " TEXT NOT NULL,"
                 + COL_CREATEDAT + " DATE NOT NULL,"
-                + COL_UPDATEDAT + " DATE NOT NULL);";
+                + COL_UPDATEDAT + " DATE NOT NULL,"
+                + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
     public void open(){
@@ -53,7 +55,13 @@ public class CategorySQLiteAdapter {
 
     //INSERT CATEGORY ON DATABASE
     public long insert(Category category){
-        return db.insert(TABLE_CATEGORY, null, this.itemToContentValues(category));
+        long id = 0;
+        if(this.getCategory(category.getIdServer()) != null){
+            id = this.getCategory(category.getIdServer()).getId();
+        }else{
+            id = db.insert(TABLE_CATEGORY, null, this.itemToContentValues(category));
+        }
+        return id;
     }
 
     //UPDATE CATEGORY ON DATABASE
@@ -75,12 +83,12 @@ public class CategorySQLiteAdapter {
         return this.db.delete(TABLE_CATEGORY, whereClause, whereArgs);
     }
 
-    public Category getCategory(long id){
+    public Category getCategory(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT};
 
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+        String whereClauses = COL_IDSERVER + "= ?";
+        String[] whereArgs = {String.valueOf(idServer)};
 
         Cursor c = this.db.query(TABLE_CATEGORY, cols, whereClauses, whereArgs, null, null, null);
 
@@ -137,6 +145,7 @@ public class CategorySQLiteAdapter {
         //DateFormat df = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         values.put(COL_CREATEDAT, category.getCreated_at().toString());
         values.put(COL_UPDATEDAT, category.getUpdated_at().toString());
+        values.put(COL_IDSERVER, category.getIdServer());
 
         return values;
     }

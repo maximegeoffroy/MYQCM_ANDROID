@@ -26,6 +26,7 @@ public class QuestionSQLiteAdapter {
     public static final String COL_CREATEDAT = "created_at";
     public static final String COL_UPDATEDAT = "updated_at";
     public static final String COL_QCMID = "qcm_id";
+    public static final String COL_IDSERVER = "idServer";
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
@@ -44,7 +45,8 @@ public class QuestionSQLiteAdapter {
                 + COL_CONTENT + " TEXT NOT NULL,"
                 + COL_CREATEDAT + " DATE NOT NULL,"
                 + COL_UPDATEDAT + " DATE NOT NULL,"
-                + COL_QCMID + " INTEGER NOT NULL);";
+                + COL_QCMID + " INTEGER NOT NULL,"
+                + COL_IDSERVER + " INTEGER NOT NULL)";
     }
 
     public void open(){
@@ -57,7 +59,13 @@ public class QuestionSQLiteAdapter {
 
     //INSERT QUESTION ON DATABASE
     public long insert(Question question){
-        return db.insert(TABLE_QUESTION, null, this.itemToContentValues(question));
+        long id = 0;
+        if(this.getQuestion(question.getIdServer()) != null){
+            id = this.getQuestion(question.getIdServer()).getId();
+        }else{
+            return db.insert(TABLE_QUESTION, null, this.itemToContentValues(question));
+        }
+        return id;
     }
 
     //UPDATE QUESTION ON DATABASE
@@ -79,12 +87,12 @@ public class QuestionSQLiteAdapter {
         return this.db.delete(TABLE_QUESTION, whereClause, whereArgs);
     }
 
-    public Question getQuestion(long id){
+    public Question getQuestion(long idServer){
         //SELECT
-        String[] cols = {COL_ID, COL_CONTENT, COL_CREATEDAT, COL_UPDATEDAT, COL_QCMID};
+        String[] cols = {COL_ID, COL_CONTENT, COL_CREATEDAT, COL_UPDATEDAT, COL_QCMID, COL_IDSERVER};
 
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+        String whereClauses = COL_IDSERVER + "= ?";
+        String[] whereArgs = {String.valueOf(idServer)};
 
         Cursor c = this.db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
 
@@ -182,6 +190,7 @@ public class QuestionSQLiteAdapter {
         values.put(COL_CREATEDAT, question.getCreated_at().toString());
         values.put(COL_UPDATEDAT, question.getUpdated_at().toString());
         values.put(COL_QCMID, question.getQcm().getId());
+        values.put(COL_IDSERVER, question.getIdServer());
 
         return values;
     }

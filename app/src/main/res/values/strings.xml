@@ -6,15 +6,16 @@
     <string name="etUsernameConnexion">Nom utilisateur</string>
     <string name="etPasswordConnexion">Mot de passe</string>
     <string name="btConnexion">Connexion</string>
-    <string name="title_activity_category_list">CategoryListActivity</string>
+    <string name="title_activity_category_list">Catégories</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_qcm_list">QcmListActivity</string>
+    <string name="title_activity_qcm_list">Qcms</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

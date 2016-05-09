@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iia.myqcm">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +26,11 @@
             android:name=".view.QcmListActivity"
             android:label="@string/title_activity_qcm_list"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.QuestionActivity"></activity>
+        <activity android:name=".view.QuestionActivity" />
+        <activity
+            android:name=".view.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

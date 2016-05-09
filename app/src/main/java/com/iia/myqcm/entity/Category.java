@@ -28,6 +28,11 @@ public class Category {
     protected Date updated_at;
 
     /*
+        Category idServer
+    */
+    protected long idServer;
+
+    /*
         Get id
      */
     public long getId() {
@@ -81,5 +86,19 @@ public class Category {
      */
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
+    }
+
+    /*
+        Get idServer
+     */
+    public long getIdServer() {
+        return idServer;
+    }
+
+    /*
+        Set idServer
+     */
+    public void setIdServer(long idServer) {
+        this.idServer = idServer;
     }
 }
