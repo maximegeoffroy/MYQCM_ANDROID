@@ -30,6 +30,10 @@ public class CategorySQLiteAdapter {
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
 
+    /**
+     * Constructor of CategorySQLiteAdapter
+     * @param context
+     */
     public CategorySQLiteAdapter(Context context) {
         this.helper = new MyqcmSQLiteOpenHelper(context,MyqcmSQLiteOpenHelper.DB_NAME, null, 1);
     }
@@ -45,15 +49,25 @@ public class CategorySQLiteAdapter {
                 + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open(){
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
-    //INSERT CATEGORY ON DATABASE
+    /**
+     * Insert category in database
+     * @param category
+     * @return category id
+     */
     public long insert(Category category){
         long id = 0;
         if(this.getCategory(category.getIdServer()) != null){
@@ -64,7 +78,11 @@ public class CategorySQLiteAdapter {
         return id;
     }
 
-    //UPDATE CATEGORY ON DATABASE
+    /**
+     * Update category in database
+     * @param category
+     * @return category id
+     */
     public long update(Category category){
         ContentValues values = this.itemToContentValues(category);
 
@@ -74,7 +92,11 @@ public class CategorySQLiteAdapter {
         return this.db.update(TABLE_CATEGORY, values, whereClause, whereArgs);
     }
 
-    //DELETE CATEGORY ON DATABASE
+    /**
+     * Delete category in database
+     * @param category
+     * @return category id
+     */
     public long delete(Category category){
         //DELETE
         String whereClause = COL_ID + "= ?";
@@ -83,6 +105,11 @@ public class CategorySQLiteAdapter {
         return this.db.delete(TABLE_CATEGORY, whereClause, whereArgs);
     }
 
+    /**
+     * Get category in database
+     * @param idServer
+     * @return Category
+     */
     public Category getCategory(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT};
@@ -105,6 +132,10 @@ public class CategorySQLiteAdapter {
         return resultCategory;
     }
 
+    /**
+     * Get all cursor category
+     * @return Cursor
+     */
     public Cursor getAllCursor(){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT};
@@ -114,6 +145,11 @@ public class CategorySQLiteAdapter {
         return c;
     }
 
+    /**
+     * Convert cursor to category
+     * @param c
+     * @return Category
+     */
     public static Category cursorToItem(Cursor c){
         Category resultCategory = new Category();
 
@@ -138,6 +174,11 @@ public class CategorySQLiteAdapter {
         return resultCategory;
     }
 
+    /**
+     * Convert category to content values
+     * @param category
+     * @return Content Values
+     */
     //CONVERT ITEM TO CONTENT VALUES
     private ContentValues itemToContentValues(Category category){
         ContentValues values = new ContentValues();

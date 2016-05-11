@@ -19,6 +19,10 @@ public class AnswerUserSQLiteAdapter {
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
 
+    /**
+     * Constructor of answerUserSQLiteAdapter
+     * @param context
+     */
     public AnswerUserSQLiteAdapter(Context context) {
         this.helper = new MyqcmSQLiteOpenHelper(context,MyqcmSQLiteOpenHelper.DB_NAME, null, 1);
     }
@@ -32,20 +36,34 @@ public class AnswerUserSQLiteAdapter {
                 + COL_QUESTIONID + " INTEGER NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open(){
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
-    //INSERT ANSWER ON DATABASE
+    /**
+     * Insert answerUser on database
+     * @param answerUser
+     * @return id
+     */
     public long insert(AnswerUser answerUser){
         return db.insert(TABLE_ANSWERUSER, null, this.itemToContentValues(answerUser));
     }
 
-    //CONVERT ITEM TO CONTENT VALUES
+    /**
+     * Convert item to content values
+     * @param answerUser
+     * @return ContentValues
+     */
     private ContentValues itemToContentValues(AnswerUser answerUser){
         ContentValues values = new ContentValues();
         values.put(COL_ANSWERID, answerUser.getQuestion_id());

@@ -32,6 +32,10 @@ public class UserSQLiteAdapter {
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
 
+    /**
+     * Constructor of UserSQLiteAdapter
+     * @param context
+     */
     public UserSQLiteAdapter(Context context) {
         this.ctx = context;
         this.helper = new MyqcmSQLiteOpenHelper(context, MyqcmSQLiteOpenHelper.DB_NAME, null, 1);
@@ -52,20 +56,34 @@ public class UserSQLiteAdapter {
                 + COL_GROUPID + " INTEGER NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open(){
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
-    //INSERT USER ON DATABASE
+    /**
+     * Insert user in database
+     * @param user
+     * @return user id
+     */
     public long insert(User user){
         return db.insert(TABLE_USER, null, this.itemToContentValues(user));
     }
 
-    //UPDATE USER ON DATABASE
+    /**
+     * Update user in database
+     * @param user
+     * @return user id
+     */
     public long update(User user){
         ContentValues values = this.itemToContentValues(user);
 
@@ -75,6 +93,11 @@ public class UserSQLiteAdapter {
         return this.db.update(TABLE_USER, values, whereClause, whereArgs);
     }
 
+    /**
+     * Delete user in database
+     * @param user
+     * @return user id
+     */
     //DELETE USER ON DATABASE
     public long delete(User user){
         //DELETE
@@ -84,6 +107,11 @@ public class UserSQLiteAdapter {
         return this.db.delete(TABLE_USER, whereClause, whereArgs);
     }
 
+    /**
+     * Get user in database
+     * @param id
+     * @return User
+     */
     public User getUser(long id){
         //SELECT
         String[] cols = {COL_ID, COL_USERNAME,COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT, COL_UPDATEDAT, COL_GROUPID};
@@ -106,6 +134,11 @@ public class UserSQLiteAdapter {
         return resultUser;
     }
 
+    /**
+     * Get user by username
+     * @param username
+     * @return User
+     */
     public User getUser(String username){
         //SELECT
         String[] cols = {COL_ID, COL_USERNAME, COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT, COL_UPDATEDAT, COL_GROUPID};
@@ -128,6 +161,11 @@ public class UserSQLiteAdapter {
         return resultUser;
     }
 
+    /**
+     * Convert cursor to User
+     * @param c
+     * @return User
+     */
     public User cursorToItem(Cursor c){
         User resultUser = new User();
 
@@ -164,6 +202,11 @@ public class UserSQLiteAdapter {
         return resultUser;
     }
 
+    /**
+     * Convert user to content values
+     * @param user
+     * @return Content Values
+     */
     //CONVERT ITEM TO CONTENT VALUES
     private ContentValues itemToContentValues(User user){
         ContentValues values = new ContentValues();

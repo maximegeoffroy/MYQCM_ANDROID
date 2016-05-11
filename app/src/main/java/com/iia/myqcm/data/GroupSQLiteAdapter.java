@@ -25,6 +25,10 @@ public class  GroupSQLiteAdapter {
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
 
+    /**
+     * Constructor of GroupSQLiteAdapter
+     * @param context
+     */
     public GroupSQLiteAdapter(Context context) {
         this.helper = new MyqcmSQLiteOpenHelper(context,MyqcmSQLiteOpenHelper.DB_NAME, null, 1);
     }
@@ -39,20 +43,34 @@ public class  GroupSQLiteAdapter {
                 + COL_UPDATEDAT + " DATE NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open(){
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
-    //INSERT USER ON DATABASE
+    /**
+     * Insert user in database
+     * @param group
+     * @return group id
+     */
     public long insert(Group group){
         return db.insert(TABLE_GROUP, null, this.itemToContentValues(group));
     }
 
-    //UPDATE USER ON DATABASE
+    /**
+     * Update user in database
+     * @param group
+     * @return group id
+     */
     public long update(Group group){
         ContentValues values = this.itemToContentValues(group);
 
@@ -62,6 +80,11 @@ public class  GroupSQLiteAdapter {
         return this.db.update(TABLE_GROUP, values, whereClause, whereArgs);
     }
 
+    /**
+     * Delete user in database
+     * @param group
+     * @return group id
+     */
     //DELETE USER ON DATABASE
     public long delete(Group group){
         //DELETE
@@ -71,6 +94,11 @@ public class  GroupSQLiteAdapter {
         return this.db.delete(TABLE_GROUP, whereClause, whereArgs);
     }
 
+    /**
+     * Get group in database
+     * @param id
+     * @return Group
+     */
     public Group getGroup(long id){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT};
@@ -93,6 +121,11 @@ public class  GroupSQLiteAdapter {
         return resultGroup;
     }
 
+    /**
+     * Convert cursor to group
+     * @param c
+     * @return Group
+     */
     public static Group cursorToItem(Cursor c){
         Group resultGroup = new Group();
 
@@ -117,6 +150,11 @@ public class  GroupSQLiteAdapter {
         return resultGroup;
     }
 
+    /**
+     * Convert group to Content Values
+     * @param group
+     * @return Content Values
+     */
     //CONVERT ITEM TO CONTENT VALUES
     private ContentValues itemToContentValues(Group group){
         ContentValues values = new ContentValues();

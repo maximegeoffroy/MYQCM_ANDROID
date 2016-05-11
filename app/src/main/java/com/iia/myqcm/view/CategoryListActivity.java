@@ -1,5 +1,6 @@
 package com.iia.myqcm.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -66,19 +67,37 @@ public class CategoryListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        long id = (long)getIntent().getSerializableExtra(ConnexionActivity.ID);
-//
-//        UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
-//        userSQLiteAdapter.open();
-//        this.user = userSQLiteAdapter.getUser(id);
-//        userSQLiteAdapter.close();
-
+        final ListView categoriesList = (ListView) this.findViewById(R.id.categoriesList);
         final UserWSAdapter userWSAdapter = new UserWSAdapter(this);
 
+        /**
+         * Call the webservice
+         */
         userWSAdapter.getUser("maxy", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Context ctx = CategoryListActivity.this;
                 User item = userWSAdapter.jsonToItem(response);
+
+                CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(ctx);
+                categorySQLiteAdapter.open();
+
+                Cursor result = categorySQLiteAdapter.getAllCursor();
+
+                CategoryCursorAdapter adapter = new CategoryCursorAdapter(ctx, result, 0);
+
+                categoriesList.setAdapter(adapter);
+
+                categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(CATEGORY_ID, id);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
@@ -87,8 +106,6 @@ public class CategoryListActivity extends AppCompatActivity
                 Toast.makeText(CategoryListActivity.this, "FAIL", Toast.LENGTH_LONG).show();
             }
         });
-
-        new LoadTask(this).execute();
     }
 
     @Override
@@ -150,49 +167,5 @@ public class CategoryListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public class LoadTask extends AsyncTask<Void, Void, Cursor> {
-
-        private CategoryListActivity ctx;
-
-        public LoadTask(CategoryListActivity categoryListActivity) {
-            this.ctx = categoryListActivity;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Cursor doInBackground(Void... params) {
-
-            CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this.ctx);
-            categorySQLiteAdapter.open();
-
-            return categorySQLiteAdapter.getAllCursor();
-        }
-
-        @Override
-        protected void onPostExecute(Cursor result) {
-            CategoryCursorAdapter adapter = new CategoryCursorAdapter(this.ctx, result, 0);
-
-            final ListView categoriesList = (ListView) this.ctx.findViewById(R.id.categoriesList);
-            categoriesList.setAdapter(adapter);
-
-            categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(CATEGORY_ID, id);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-
-            super.onPostExecute(result);
-        }
     }
 }

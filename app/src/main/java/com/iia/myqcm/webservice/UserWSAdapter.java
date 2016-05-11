@@ -33,11 +33,7 @@ public class UserWSAdapter {
 
     private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
-    //private static final String ENTITY = "title/test1/isbn/123456";
     private static final String VERSION = "1";
-    private static AsyncHttpClient client = new AsyncHttpClient();
-    private Context ctx;
-
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
@@ -45,20 +41,41 @@ public class UserWSAdapter {
     private static final String UPDATEDAT = "updated_at";
     private static final String USERQCMS = "user_qcms";
 
+    private static AsyncHttpClient client = new AsyncHttpClient();
+    private Context ctx;
+
+    /**
+     * Constructor of UserWSAdapter
+     * @param context
+     */
     public UserWSAdapter(Context context) {
         this.ctx = context;
     }
 
+    /**
+     * Get user in webservice database
+     * @param username
+     * @param handler
+     */
     public void getUser(String username, AsyncHttpResponseHandler handler){
         String url = String.format("%s/%s/%s", BASE_URL, ENTITY, username);
         client.get(url, handler);
     }
 
+    /**
+     * Get all users in webservice database
+     * @param responseHandler
+     */
     public static void getAll(AsyncHttpResponseHandler responseHandler) {
         String url = String.format("%s/%s", BASE_URL, ENTITY);
         client.get(url, responseHandler);
     }
 
+    /**
+     * Convert json to user and add in local database
+     * @param json
+     * @return User
+     */
     public User jsonToItem(JSONObject json) {
         User item = new User();
         item.setUsername(json.optString(USERNAME));
@@ -162,29 +179,3 @@ public class UserWSAdapter {
         return item;
     }
 }
-//    public static JSONObject itemToJson(Book item){
-//        JSONObject result = new JSONObject();
-//
-//        try {
-//            if(item.getTitle() != null){
-//                result.put(TITLE, item.getTitle());
-//            }
-//            if(item.getIsbn() != null){
-//                result.put(ISBN, item.getIsbn());
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return result;
-//    }
-//
-//    public static RequestParams itemToParams(Book item){
-//        RequestParams params = new RequestParams();
-//        params.put(TITLE, item.getTitle());
-//        params.put(ISBN, item.getIsbn());
-//
-//        return params;
-//    }
-//
-//}

@@ -33,11 +33,18 @@ public class QcmSQLiteAdapter {
     private MyqcmSQLiteOpenHelper helper;
     private Context ctx;
 
+    /**
+     * Constructor of QcmSQLiteAdapter
+     * @param context
+     */
     public QcmSQLiteAdapter(Context context){
         this.ctx = context;
         helper = new MyqcmSQLiteOpenHelper(context, MyqcmSQLiteOpenHelper.DB_NAME, null,1);
     }
 
+    /**
+     * @return schema of the database
+     */
     public static String getSchema(){
         return "CREATE TABLE "+ TABLE_QCM + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_NAME + " TEXT NOT NULL,"
@@ -50,14 +57,25 @@ public class QcmSQLiteAdapter {
                 + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open() {
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
+    /**
+     * Insert Qcm in database
+     * @param qcm
+     * @return qcm id
+     */
     public long insert(Qcm qcm){
         long id = 0;
         if(this.getQcm(qcm.getIdServer()) != null){
@@ -69,6 +87,11 @@ public class QcmSQLiteAdapter {
         return id;
     }
 
+    /**
+     * Get qcm in database
+     * @param idServer
+     * @return Qcm
+     */
     public Qcm getQcm(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
@@ -91,6 +114,11 @@ public class QcmSQLiteAdapter {
         return resultQcm;
     }
 
+    /**
+     * Get qcm by category in database
+     * @param idCategory
+     * @return Qcm
+     */
     public Qcm getQcmByCategory(long idCategory){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
@@ -113,6 +141,10 @@ public class QcmSQLiteAdapter {
         return resultQcm;
     }
 
+    /**
+     * Get all cursor qcm
+     * @return Cursor
+     */
     public Cursor getAllCursor(){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
@@ -122,6 +154,11 @@ public class QcmSQLiteAdapter {
         return c;
     }
 
+    /**
+     * Get all cursor qcm by category
+     * @param categoryId
+     * @return Cursor
+     */
     public Cursor getAllCursorByCategory(long categoryId){
         //SELECT
         String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
@@ -134,6 +171,11 @@ public class QcmSQLiteAdapter {
         return c;
     }
 
+    /**
+     * Convert cursor to qcm
+     * @param c
+     * @return Qcm
+     */
     public Qcm cursorToItem(Cursor c){
         Qcm resultQcm = new Qcm();
 
@@ -186,6 +228,11 @@ public class QcmSQLiteAdapter {
         return resultQcm;
     }
 
+    /**
+     * Convert item to content values
+     * @param qcm
+     * @return Content Values
+     */
     private ContentValues itemToContentValues(Qcm qcm){
         ContentValues values = new ContentValues();
         values.put(COL_NAME, qcm.getName());

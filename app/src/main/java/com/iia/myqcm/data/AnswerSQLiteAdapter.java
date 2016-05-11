@@ -30,6 +30,10 @@ public class AnswerSQLiteAdapter {
     private MyqcmSQLiteOpenHelper helper;
     private Context ctx;
 
+    /**
+     * Constructor of AnswerSQLiteAdapter
+     * @param context
+     */
     public AnswerSQLiteAdapter(Context context) {
         this.ctx = context;
         this.helper = new MyqcmSQLiteOpenHelper(context,MyqcmSQLiteOpenHelper.DB_NAME, null, 1);
@@ -49,15 +53,25 @@ public class AnswerSQLiteAdapter {
                 + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
+    /**
+     * Open database
+     */
     public void open(){
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close(){
         this.db.close();
     }
 
-    //INSERT ANSWER ON DATABASE
+    /**
+     * Insert Answer in database
+     * @param answer
+     * @return id
+     */
     public long insert(Answer answer){
         long id = 0;
         if(this.getAnswer(answer.getIdServer()) != null){
@@ -68,7 +82,11 @@ public class AnswerSQLiteAdapter {
         return id;
     }
 
-    //UPDATE ANSWER ON DATABASE
+    /**
+     * Update Answer in database
+     * @param answer
+     * @return id
+     */
     public long update(Answer answer){
         ContentValues values = this.itemToContentValues(answer);
 
@@ -78,6 +96,11 @@ public class AnswerSQLiteAdapter {
         return this.db.update(TABLE_ANSWER, values, whereClause, whereArgs);
     }
 
+    /**
+     * Delete answer in database
+     * @param answer
+     * @return id
+     */
     //DELETE ANSWER ON DATABASE
     public long delete(Answer answer){
         String whereClause = COL_ID + "= ?";
@@ -86,6 +109,11 @@ public class AnswerSQLiteAdapter {
         return this.db.delete(TABLE_ANSWER, whereClause, whereArgs);
     }
 
+    /**
+     * Get answer in database
+     * @param idServer
+     * @return Answer
+     */
     public Answer getAnswer(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID};
@@ -108,6 +136,11 @@ public class AnswerSQLiteAdapter {
         return resultAnswer;
     }
 
+    /**
+     * Get all cursor by question
+     * @param questionId
+     * @return Cursor
+     */
     public Cursor getAllCursorByQuestion(long questionId){
         //SELECT
         String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID};
@@ -120,6 +153,11 @@ public class AnswerSQLiteAdapter {
         return c;
     }
 
+    /**
+     * Get all answer by question
+     * @param questionId
+     * @return ArrayList of answers
+     */
     public ArrayList<Answer> getAllByQuestion(long questionId){
         Cursor c = this.getAllCursorByQuestion(questionId);
 
@@ -139,6 +177,11 @@ public class AnswerSQLiteAdapter {
         return resultAnswers;
     }
 
+    /**
+     * Convert cursor to answer
+     * @param c
+     * @return Answer
+     */
     public Answer cursorToItem(Cursor c){
         Answer resultAnswer = new Answer();
 
@@ -183,6 +226,11 @@ public class AnswerSQLiteAdapter {
         return resultAnswer;
     }
 
+    /**
+     * Convert answer to content values
+     * @param answer
+     * @return ContentValues
+     */
     //CONVERT ITEM TO CONTENT VALUES
     private ContentValues itemToContentValues(Answer answer){
         ContentValues values = new ContentValues();

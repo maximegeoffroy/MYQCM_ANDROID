@@ -11,6 +11,13 @@ public class MyqcmSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "myqcmdatabase.sqlite";
 
+    /**
+     * Constructor of MyqcmSQLiteOpenHelper
+     * @param context
+     * @param name
+     * @param factory
+     * @param version
+     */
     public MyqcmSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
