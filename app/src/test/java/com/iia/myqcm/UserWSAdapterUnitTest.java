@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class UserWSAdapterUnitTest {
 
-    private static final String BASE_URL = "http://192.168.218.13/myQCM/web/app_dev.php/api";
+    private static final String BASE_URL = "http://192.168.100.172/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
 
     /**

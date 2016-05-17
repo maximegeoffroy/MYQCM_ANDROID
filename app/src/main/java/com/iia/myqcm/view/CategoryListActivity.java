@@ -1,5 +1,6 @@
 package com.iia.myqcm.view;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,6 +48,7 @@ public class CategoryListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CATEGORY_ID = "id";
+    public ProgressDialog progressDialog;
 
     private User user;
 
@@ -71,6 +73,13 @@ public class CategoryListActivity extends AppCompatActivity
         final UserWSAdapter userWSAdapter = new UserWSAdapter(this);
 
         /**
+         * Create and show progressDialog
+         */
+        progressDialog = new ProgressDialog(this,R.style.myQcmProgressDialog);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+
+        /**
          * Call the webservice
          */
         userWSAdapter.getUser("maxy", new JsonHttpResponseHandler() {
@@ -87,6 +96,14 @@ public class CategoryListActivity extends AppCompatActivity
                 CategoryCursorAdapter adapter = new CategoryCursorAdapter(ctx, result, 0);
 
                 categoriesList.setAdapter(adapter);
+
+                /**
+                 * If progressDialog showing, close this
+                 */
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
 
                 categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

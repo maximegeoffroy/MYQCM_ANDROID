@@ -10,4 +10,7 @@
     <dimen name="row_list_size">50dp</dimen>
     <dimen name="font_size_title">40sp</dimen>
     <dimen name="font_size_item_list">20sp</dimen>
+
+    <!-- myQCM Theme -->
+    <dimen name="answer_police_size">18dp</dimen>
 </resources>

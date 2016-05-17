@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:textSize="@dimen/font_size_title"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="50dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -33,6 +33,7 @@
             android:ems="10"
             android:id="@+id/etUsername"
             android:layout_weight="1"
+            android:background="@drawable/border_edittext"
             android:hint="@string/etUsernameConnexion" />
     </LinearLayout>
 
@@ -53,7 +54,9 @@
             android:ems="10"
             android:id="@+id/etPasswordUser"
             android:layout_weight="1"
-            android:hint="@string/etPasswordConnexion" />
+            android:background="@drawable/border_edittext"
+            android:hint="@string/etPasswordConnexion"
+            android:textCursorDrawable="@color/primaryColor"/>
     </LinearLayout>
 
     <Button
@@ -63,6 +66,7 @@
         android:id="@+id/buttonConnexion"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/background_button"/>
 
 </LinearLayout>

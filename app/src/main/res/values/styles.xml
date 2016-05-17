@@ -17,4 +17,23 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- My theme -->
+    <style name="myQcmTheme" parent="AppTheme" >
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/secondlyColor</item>
+        <item name="android:textCursorDrawable">@drawable/green_cursor</item>
+    </style>
+
+    <!-- myQcm Theme noActionBar -->
+    <style name="myQcmTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- myQcm Theme progressDialog -->
+    <style name="myQcmProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/primaryColor</item>
+    </style>
+
 </resources>
