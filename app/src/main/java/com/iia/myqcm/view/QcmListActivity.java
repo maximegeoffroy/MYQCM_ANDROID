@@ -87,17 +87,14 @@ public class QcmListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_categories) {
+            Intent intent = new Intent(QcmListActivity.this, CategoryListActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_profile) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_help) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }else if (id == R.id.nav_logout) {
 
         }
 
@@ -127,7 +124,7 @@ public class QcmListActivity extends AppCompatActivity
             Bundle bundle = this.ctx.getIntent().getExtras();
             long categoryId = bundle.getLong(CategoryListActivity.CATEGORY_ID);
 
-            Qcm q = qcmSQLiteAdapter.getQcmByCategory(categoryId);
+            //Qcm q = qcmSQLiteAdapter.getQcmByCategory(categoryId);
 
             return qcmSQLiteAdapter.getAllCursorByCategory(categoryId);
         }

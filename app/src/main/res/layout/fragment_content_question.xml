@@ -32,13 +32,26 @@
 
         </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Valider"
-            android:id="@+id/btValidate" />
+            android:gravity="center">
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Précédent"
+                android:id="@+id/btBack"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Valider"
+                android:id="@+id/btValidate" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

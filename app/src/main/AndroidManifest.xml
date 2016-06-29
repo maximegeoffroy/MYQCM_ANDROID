@@ -3,7 +3,7 @@
     package="com.iia.myqcm">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +30,12 @@
         <activity
             android:name=".view.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/myQcmTheme.NoActionBar"></activity>
+            android:theme="@style/myQcmTheme.NoActionBar" />
+        <activity
+            android:name=".view.NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer"
+            android:theme="@style/myQcmTheme.NoActionBar" />
+        <activity android:name=".view.EndPageActivity"></activity>
     </application>
 
 </manifest>

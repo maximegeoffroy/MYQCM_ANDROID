@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by gemax on 06/02/2016.
@@ -25,6 +26,7 @@ public class AnswerSQLiteAdapter {
     public static final String COL_UPDATEDAT = "updated_at";
     public static final String COL_QUESTIONID = "question_id";
     public static final String COL_IDSERVER = "idServer";
+    public static final String COL_ISSELECTED = "is_selected";
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
@@ -50,7 +52,8 @@ public class AnswerSQLiteAdapter {
                 + COL_CREATEDAT + " DATE NOT NULL,"
                 + COL_UPDATEDAT + " DATE NOT NULL,"
                 + COL_QUESTIONID + " INTEGER NOT NULL,"
-                + COL_IDSERVER + " INTEGER NOT NULL);";
+                + COL_IDSERVER + " INTEGER NOT NULL,"
+                + COL_ISSELECTED + " INTEGER NOT NULL);";
     }
 
     /**
@@ -77,7 +80,7 @@ public class AnswerSQLiteAdapter {
         if(this.getAnswer(answer.getIdServer()) != null){
             id = this.getAnswer(answer.getIdServer()).getId();
         }else{
-            return db.insert(TABLE_ANSWER, null, this.itemToContentValues(answer));
+            id = db.insert(TABLE_ANSWER, null, this.itemToContentValues(answer));
         }
         return id;
     }
@@ -143,7 +146,7 @@ public class AnswerSQLiteAdapter {
      */
     public Cursor getAllCursorByQuestion(long questionId){
         //SELECT
-        String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID};
+        String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID, COL_IDSERVER,COL_ISSELECTED};
 
         String whereClauses = COL_QUESTIONID + "= ?";
         String[] whereArgs = {String.valueOf(questionId)};
@@ -198,28 +201,17 @@ public class AnswerSQLiteAdapter {
         }
 
         //DATE CREATED AT
-        DateFormat df = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        String dateCreatedAt = c.getString(c.getColumnIndex(COL_CREATEDAT));
-        try {
-            resultAnswer.setCreated_at(df.parse(dateCreatedAt));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date d = new Date();
+        resultAnswer.setCreated_at(d);
         //DATE UPDATED AT
-        String dateUpdatedAt = c.getString(c.getColumnIndex(COL_UPDATEDAT));
-        try {
-            resultAnswer.setCreated_at(df.parse(dateUpdatedAt));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        resultAnswer.setUpdated_at(d);
 
         //QUESTION
-        long questionId = c.getInt(c.getColumnIndex(COL_QUESTIONID));
-
+        long questionId = c.getLong(c.getColumnIndex(COL_QUESTIONID));
         QuestionSQLiteAdapter questionSQLiteAdapter = new QuestionSQLiteAdapter(this.ctx);
         questionSQLiteAdapter.open();
 
-        resultAnswer.setQuestion(questionSQLiteAdapter.getQuestion(questionId));
+        resultAnswer.setQuestion(questionSQLiteAdapter.getQuestionById(questionId));
 
         questionSQLiteAdapter.close();
 
@@ -241,6 +233,7 @@ public class AnswerSQLiteAdapter {
         values.put(COL_UPDATEDAT, answer.getUpdated_at().toString());
         values.put(COL_QUESTIONID, answer.getQuestion().getId());
         values.put(COL_IDSERVER, answer.getIdServer());
+        values.put(COL_ISSELECTED, answer.getIs_selected());
 
         return values;
     }

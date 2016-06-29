@@ -18,7 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- My theme -->
-    <style name="myQcmTheme" parent="AppTheme" >
+    <style name="myQcmTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">@color/secondlyColor</item>
@@ -35,5 +35,9 @@
     <style name="myQcmProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/primaryColor</item>
     </style>
+
+    <style name="myQcmTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="myQcmTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

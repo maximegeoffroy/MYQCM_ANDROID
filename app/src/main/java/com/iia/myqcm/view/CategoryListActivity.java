@@ -3,6 +3,7 @@ package com.iia.myqcm.view;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,9 +49,6 @@ public class CategoryListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CATEGORY_ID = "id";
-    public ProgressDialog progressDialog;
-
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +56,9 @@ public class CategoryListActivity extends AppCompatActivity
         setContentView(R.layout.activity_category_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Bundle bundle = this.getIntent().getExtras();
+        //userId = bundle.getLong(ConnexionActivity.USER_ID);
 
         //CODE NAVIGATION VIEW
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -70,57 +71,24 @@ public class CategoryListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         final ListView categoriesList = (ListView) this.findViewById(R.id.categoriesList);
-        final UserWSAdapter userWSAdapter = new UserWSAdapter(this);
 
-        /**
-         * Create and show progressDialog
-         */
-        progressDialog = new ProgressDialog(this,R.style.myQcmProgressDialog);
-        progressDialog.setMessage("Loading");
-        progressDialog.show();
+        CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this);
+        categorySQLiteAdapter.open();
 
-        /**
-         * Call the webservice
-         */
-        userWSAdapter.getUser("maxy", new JsonHttpResponseHandler() {
+        Cursor result = categorySQLiteAdapter.getAllCursor();
+
+        CategoryCursorAdapter adapter = new CategoryCursorAdapter(this, result, 0);
+
+        categoriesList.setAdapter(adapter);
+
+        categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Context ctx = CategoryListActivity.this;
-                User item = userWSAdapter.jsonToItem(response);
-
-                CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(ctx);
-                categorySQLiteAdapter.open();
-
-                Cursor result = categorySQLiteAdapter.getAllCursor();
-
-                CategoryCursorAdapter adapter = new CategoryCursorAdapter(ctx, result, 0);
-
-                categoriesList.setAdapter(adapter);
-
-                /**
-                 * If progressDialog showing, close this
-                 */
-                if(progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                    progressDialog = null;
-                }
-
-                categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(CATEGORY_ID, id);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Toast.makeText(CategoryListActivity.this, "FAIL", Toast.LENGTH_LONG).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CategoryListActivity.this, QcmListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(CATEGORY_ID, id);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -163,21 +131,15 @@ public class CategoryListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Intent i = new Intent(CategoryListActivity.this, ProfileActivity.class);
-            Bundle b = new Bundle();
-            b.putLong(ConnexionActivity.ID,this.user.getId());
-            i.putExtras(b);
-            startActivity(i);
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_categories) {
+            Intent intent = new Intent(CategoryListActivity.this, CategoryListActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_profile) {
+            Intent intent = new Intent(CategoryListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_help) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }else if (id == R.id.nav_logout) {
 
         }
 

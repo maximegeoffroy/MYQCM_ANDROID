@@ -59,6 +59,11 @@ public class User implements Serializable {
      */
     protected ArrayList<QcmUser> qcmsUser;
 
+    /**
+     Qcm idServer
+     */
+    protected long idServer;
+
 
     /**
      * Get id
@@ -209,5 +214,20 @@ public class User implements Serializable {
      */
     public void setQcmsUser(ArrayList<QcmUser> qcmUser) {
         this.qcmsUser = qcmUser;
+    }
+
+    /**
+     * Get idServer
+     * @return idServer
+     */
+    public long getIdServer() {
+        return idServer;
+    }
+
+    /**
+     * Set idServer
+     */
+    public void setIdServer(long idServer) {
+        this.idServer = idServer;
     }
 }

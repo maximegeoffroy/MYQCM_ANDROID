@@ -16,6 +16,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="title_activity_end_page">EndPageActivity</string>
+    <string name="title_activity_question">Questions</string>
+
+    <string name="menu_drawer_categories">Catégories</string>
+    <string name="menu_drawer_profile">Profil</string>
+    <string name="menu_drawer_help">Aide</string>
+    <string name="menu_drawer_logout">Déconnexion</string>
 
 </resources>

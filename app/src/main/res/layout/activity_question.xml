@@ -9,11 +9,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.iia.myqcm.view.QuestionActivity">
 
-    <fragment
-        android:id="@+id/questionFragment"
-        android:name="com.iia.myqcm.view.ContentQuestionFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_content_question" />
+        android:orientation="vertical"
+        android:id="@+id/linearLayoutParent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_item_list"
+            android:id="@+id/tvQcmName"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_item_list"
+            android:id="@+id/tvContentQuestion"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:id="@+id/linearLayoutContainer">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Précédent"
+                android:id="@+id/btBack"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Valider"
+                android:id="@+id/btValidate" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

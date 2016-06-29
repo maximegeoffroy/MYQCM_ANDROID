@@ -48,6 +48,11 @@ public class Answer {
     protected long idServer;
 
     /**
+     * answer isSelected
+     */
+    protected boolean is_selected;
+
+    /**
      * Get id
      * @return id
      */
@@ -173,5 +178,21 @@ public class Answer {
      */
     public void setIdServer(long idServer) {
         this.idServer = idServer;
+    }
+
+    /**
+     * Get is_selected
+     * @return is_selected
+     */
+    public boolean getIs_selected() {
+        return is_selected;
+    }
+
+    /**
+     * Set is_selected
+     * @param is_selected
+     */
+    public void setIs_selected(boolean is_selected) {
+        this.is_selected = is_selected;
     }
 }

@@ -1,164 +1,184 @@
 package com.iia.myqcm.view;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iia.myqcm.R;
 import com.iia.myqcm.data.AnswerSQLiteAdapter;
-import com.iia.myqcm.data.AnswerUserSQLiteAdapter;
 import com.iia.myqcm.data.QuestionSQLiteAdapter;
 import com.iia.myqcm.entity.Answer;
-import com.iia.myqcm.entity.AnswerUser;
 import com.iia.myqcm.entity.Question;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ContentQuestionFragment extends Fragment {
     public final String SELECT_ANSWER = "Selectionner au moins une réponse";
-    public final String NO_QUESTIONS = "Plus de questions";
+    public final String BUTTON_ENVOYER = "Envoyer";
+
+    public ArrayList<Question> questionsList;
+    public ArrayList<Answer> resultAnswers;
+    public int c = 0;
+    public Question q;
+    public boolean checkboxChecked = false;
+
+    public View view;
+    public LinearLayout linearLayout;
+    public TextView tvContentQuestion;
+    public TextView tvQcmName;
+    public Button btValidate;
+    public Button btBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_content_question, container, false);
-        final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearLayoutContainer);
-        final TextView tvContentQuestion = (TextView) view.findViewById(R.id.tvContentQuestion);
-        final TextView tvQcmName = (TextView) view.findViewById(R.id.tvQcmName);
-        final Button btValidate = (Button) view.findViewById(R.id.btValidate);
+        view = inflater.inflate(R.layout.fragment_content_question, container, false);
+        linearLayout = (LinearLayout) view.findViewById(R.id.linearLayoutContainer);
+        tvContentQuestion = (TextView) view.findViewById(R.id.tvContentQuestion);
+        tvQcmName = (TextView) view.findViewById(R.id.tvQcmName);
+        btValidate = (Button) view.findViewById(R.id.btValidate);
+        btBack = (Button) view.findViewById(R.id.btBack);
 
         Bundle b = getActivity().getIntent().getExtras();
         long qcmId = b.getLong(QcmListActivity.QCM_ID);
 
         QuestionSQLiteAdapter questionSQLiteAdapter = new QuestionSQLiteAdapter(view.getContext());
         questionSQLiteAdapter.open();
-        final ArrayList<Question> questionsList = questionSQLiteAdapter.getAllByQcm(qcmId);
+        questionsList = questionSQLiteAdapter.getAllByQcm(qcmId);
         questionSQLiteAdapter.close();
 
-        final Question q = questionsList.get(0);
+        /**
+         * Show question and answers
+         */
+        if(c <= 0){
+            btBack.setClickable(false);
+        }
+
+        resultAnswers = showQuestion(c);
+
+        btValidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (checkboxChecked) {
+
+                    /**
+                     * For answer in answersList update in database if isSelected = true
+                     */
+                    for (Answer a : resultAnswers) {
+                        if (a.getIs_selected()) {
+                            /**
+                             * Update answer in database
+                             */
+                            AnswerSQLiteAdapter answerSqliteAdapter = new AnswerSQLiteAdapter(v.getContext());
+                            answerSqliteAdapter.open();
+                            answerSqliteAdapter.update(a);
+                            answerSqliteAdapter.close();
+                            Toast.makeText(v.getContext(), String.valueOf(a.getId()), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    /**
+                     * if c == size of questionsList - 1 , open new activity
+                     */
+                    if (c == (questionsList.size() - 1)) {
+                        Intent intent = new Intent(view.getContext(), EndPageActivity.class);
+                        startActivity(intent);
+                    } else {
+
+                        /**
+                         * Increment c
+                         */
+                        c++;
+
+                        linearLayout.removeAllViews();
+
+                        /**
+                         * Show next question and answers
+                         */
+                        resultAnswers = showQuestion(c);
+                    }
+                }else{
+                    Toast.makeText(v.getContext(),SELECT_ANSWER,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /**
+                 * Decrement c
+                 */
+                c--;
+
+                linearLayout.removeAllViews();
+
+                /**
+                 * Show previous question and answers
+                 */
+                resultAnswers = showQuestion(c);
+            }
+        });
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    public ArrayList<Answer> showQuestion(int c){
+
+        checkboxChecked = false;
+        q = questionsList.get(c);
+
+        /**
+         * Get answers list by question id
+         */
+        AnswerSQLiteAdapter answerSQLiteAdapter = new AnswerSQLiteAdapter(view.getContext());
+        answerSQLiteAdapter.open();
+        ArrayList<Answer> answers = answerSQLiteAdapter.getAllByQuestion(q.getId());
+        answerSQLiteAdapter.close();
 
         tvQcmName.setText(q.getQcm().getCategory().getName());
         tvContentQuestion.setText(q.getContent());
 
-        AnswerSQLiteAdapter answerSQLiteAdapter = new AnswerSQLiteAdapter(view.getContext());
-        answerSQLiteAdapter.open();
-        final ArrayList<Answer> answers = answerSQLiteAdapter.getAllByQuestion(q.getId());
-        answerSQLiteAdapter.close();
+        for (final Answer a : answers) {
 
-        final ArrayList<Integer> checkBoxes = new ArrayList<>();
-        final HashMap<Long, ArrayList<Integer>> responsesUser = new HashMap<>();
-        if (answers.size() > 1) {
-            for (int i = 0; i < answers.size(); i++) {
-                final AppCompatCheckBox c = new AppCompatCheckBox(view.getContext());
-                c.setId((int) answers.get(i).getId());
-                c.setText(answers.get(i).getContent());
-                c.setTextSize(getResources().getDimension(R.dimen.font_size_item_list));
-                c.setPadding(0,0,0,20);
+            /**
+             * Create checkboxes
+             */
+            final CheckBox checkBox = new CheckBox(view.getContext());
+            checkBox.setId((int) a.getId());
+            checkBox.setText(a.getContent());
+            checkBox.setTextSize(getResources().getDimension(R.dimen.font_size_item_list));
+            checkBox.setPadding(0, 0, 0, 20);
 
-                linearLayout.addView(c);
+            linearLayout.addView(checkBox);
 
-                c.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (checkBoxes.contains(c.getId())) {
-                            int pos = checkBoxes.indexOf(c.getId());
-                            checkBoxes.remove(pos);
-                        } else {
-                            checkBoxes.add(c.getId());
-                        }
+            /**
+             * OnClickListener of checkbox
+             */
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        a.setIs_selected(true);
+                        checkboxChecked = true;
+                    }else{
+                        a.setIs_selected(false);
+                        checkboxChecked = false;
                     }
-                });
-            }
+                }
+            });
         }
-        btValidate.setOnClickListener(new View.OnClickListener() {
-            int compteur = 1;
-            @Override
-            public void onClick(View v) {
-                if(checkBoxes.size() > 1){
-                    AnswerUserSQLiteAdapter answerUserSQLiteAdapter = new AnswerUserSQLiteAdapter(view.getContext());
-                    answerUserSQLiteAdapter.open();
-                    for(Integer i: checkBoxes){
-                        AnswerUser answerUser = new AnswerUser();
-                        answerUser.setAnswer_id(i);
-                        answerUser.setQuestion_id(q.getId());
-
-                        answerUser.setId(answerUserSQLiteAdapter.insert(answerUser));
-                    }
-                    answerUserSQLiteAdapter.close();
-                }
-                //Stocke les réponses de l'utilisateur
-                responsesUser.put(q.getId(), checkBoxes);
-
-                checkBoxes.clear();
-                linearLayout.removeAllViews();
-                while (compteur < questionsList.size()) {
-                    //CHARGEMENT DE LA QUESTION SUIVANTE
-                    Question q = questionsList.get(compteur);
-
-                    tvQcmName.setText(q.getQcm().getCategory().getName());
-                    tvContentQuestion.setText(q.getContent());
-
-                    AnswerSQLiteAdapter answerSQLiteAdapter = new AnswerSQLiteAdapter(v.getContext());
-                    answerSQLiteAdapter.open();
-                    ArrayList<Answer> answers = answerSQLiteAdapter.getAllByQuestion(q.getId());
-                    answerSQLiteAdapter.close();
-
-                    if (answers.size() > 1) {
-                        for (int i = 0; i < answers.size(); i++) {
-                            final AppCompatCheckBox c = new AppCompatCheckBox(view.getContext());
-                            c.setId((int) answers.get(i).getId());
-                            c.setText(answers.get(i).getContent());
-                            c.setTextSize(getResources().getDimension(R.dimen.font_size_item_list));
-                            c.setPadding(0,0,0,20);
-
-                            linearLayout.addView(c);
-
-                            c.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (checkBoxes.contains(c.getId())) {
-                                        int pos = checkBoxes.indexOf(c.getId());
-                                        checkBoxes.remove(pos);
-                                    } else {
-                                        checkBoxes.add(c.getId());
-                                    }
-                                }
-                            });
-                        }
-                        compteur++;
-
-                        if(compteur == questionsList.size()){
-                            btValidate.setText("Envoyer");
-                            Toast.makeText(v.getContext(), NO_QUESTIONS, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-        });
-        // Inflate the layout for this fragment
-        return view;
+        return answers;
     }
 
     /**

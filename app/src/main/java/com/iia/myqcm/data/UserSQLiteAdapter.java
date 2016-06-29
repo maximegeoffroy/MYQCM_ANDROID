@@ -25,6 +25,7 @@ public class UserSQLiteAdapter {
     public static final String COL_EMAIL = "email";
     public static final String COL_CREATEDAT = "created_at";
     public static final String COL_UPDATEDAT = "updated_at";
+    public static final String COL_IDSERVER = "idServer";
     public static final String COL_GROUPID = "group_id";
 
     private Context ctx;
@@ -53,7 +54,7 @@ public class UserSQLiteAdapter {
                 + COL_EMAIL + " TEXT NOT NULL,"
                 + COL_CREATEDAT  + " DATE NOT NULL,"
                 + COL_UPDATEDAT + " DATE NOT NULL,"
-                + COL_GROUPID + " INTEGER NOT NULL);";
+                + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
     /**
@@ -76,7 +77,17 @@ public class UserSQLiteAdapter {
      * @return user id
      */
     public long insert(User user){
-        return db.insert(TABLE_USER, null, this.itemToContentValues(user));
+        long id = 0;
+        if(this.getUser(user.getIdServer()) != null){
+            id = this.getUser(user.getIdServer()).getId();
+        }else{
+            id = db.insert(TABLE_USER, null, this.itemToContentValues(user));
+        }
+
+        if(id > 0){
+            id = user.getIdServer();
+        }
+        return id;
     }
 
     /**
@@ -109,15 +120,16 @@ public class UserSQLiteAdapter {
 
     /**
      * Get user in database
-     * @param id
+     * @param idServer
      * @return User
      */
-    public User getUser(long id){
+    public User getUser(long idServer){
         //SELECT
-        String[] cols = {COL_ID, COL_USERNAME,COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT, COL_UPDATEDAT, COL_GROUPID};
+        String[] cols = {COL_ID, COL_USERNAME,COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT,
+                COL_UPDATEDAT,COL_IDSERVER};
 
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+        String whereClauses = COL_IDSERVER + "= ?";
+        String[] whereArgs = {String.valueOf(idServer)};
 
         Cursor c = db.query(TABLE_USER, cols, whereClauses, whereArgs, null, null, null);
 
@@ -135,16 +147,16 @@ public class UserSQLiteAdapter {
     }
 
     /**
-     * Get user by username
-     * @param username
+     * Get user by id
+     * @param id
      * @return User
      */
-    public User getUser(String username){
+    public User getUserById(long id){
         //SELECT
         String[] cols = {COL_ID, COL_USERNAME, COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT, COL_UPDATEDAT, COL_GROUPID};
 
-        String whereClauses = COL_USERNAME + "= ?";
-        String[] whereArgs = {username};
+        String whereClauses = COL_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
 
         Cursor c = db.query(TABLE_USER, cols, whereClauses, whereArgs, null, null, null);
 
@@ -179,25 +191,27 @@ public class UserSQLiteAdapter {
         //DATE CREATED AT
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCreatedAt = c.getString(c.getColumnIndex(COL_CREATEDAT));
-        try {
+        /*try {
             resultUser.setCreated_at(dateFormat.parse(dateCreatedAt));
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //DATE UPDATED AT
-        String dateUpdatedAt = c.getString(c.getColumnIndex(COL_UPDATEDAT));
+        /*String dateUpdatedAt = c.getString(c.getColumnIndex(COL_UPDATEDAT));
         try {
             resultUser.setCreated_at(dateFormat.parse(dateUpdatedAt));
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        resultUser.setIdServer(c.getLong(c.getColumnIndex(COL_IDSERVER)));
 
         //RECUPERE LE GROUPE
-        GroupSQLiteAdapter groupSQLiteAdapter = new GroupSQLiteAdapter(ctx);
-        groupSQLiteAdapter.open();
-        resultUser.setGroup(groupSQLiteAdapter.getGroup(c.getInt(c.getColumnIndex(COL_GROUPID))));
-        groupSQLiteAdapter.close();
+        //GroupSQLiteAdapter groupSQLiteAdapter = new GroupSQLiteAdapter(ctx);
+        //groupSQLiteAdapter.open();
+        //resultUser.setGroup(groupSQLiteAdapter.getGroup(c.getInt(c.getColumnIndex(COL_GROUPID))));
+        //groupSQLiteAdapter.close();
 
         return resultUser;
     }
@@ -215,9 +229,11 @@ public class UserSQLiteAdapter {
         values.put(COL_NAME, user.getName());
         values.put(COL_FIRSTNAME, user.getFirstname());
         values.put(COL_EMAIL, user.getEmail());
-        values.put(COL_CREATEDAT, user.getCreated_at().toString());
-        values.put(COL_UPDATEDAT, user.getUpdated_at().toString());
-        values.put(COL_GROUPID, user.getGroup().getId());
+        Date d = new Date();
+        values.put(COL_CREATEDAT, d.toString());
+        values.put(COL_UPDATEDAT, d.toString());
+        values.put(COL_IDSERVER, user.getIdServer());
+        //values.put(COL_GROUPID, user.getGroup().getId());
 
         return values;
     }

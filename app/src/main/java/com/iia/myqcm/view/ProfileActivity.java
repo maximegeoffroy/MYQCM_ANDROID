@@ -1,5 +1,7 @@
 package com.iia.myqcm.view;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,16 +45,14 @@ public class ProfileActivity extends AppCompatActivity
         TextView tvUserFirstnameProfile = (TextView)this.findViewById(R.id.tvUserFirstnameProfile);
         TextView tvUserGroupProfile = (TextView)this.findViewById(R.id.tvUserGroupProfile);
 
-        long id = (long)getIntent().getSerializableExtra(ConnexionActivity.ID);
+        //UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
+        //userSQLiteAdapter.open();
+        //this.user = userSQLiteAdapter.getUser(userId);
+        //userSQLiteAdapter.close();
 
-        UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
-        userSQLiteAdapter.open();
-        this.user = userSQLiteAdapter.getUser(id);
-        userSQLiteAdapter.close();
-
-        tvUserNameProfile.setText(this.user.getName());
-        tvUserFirstnameProfile.setText(this.user.getFirstname());
-        tvUserGroupProfile.setText(this.user.getGroup().getName());
+        //tvUserNameProfile.setText(this.user.getName());
+        //tvUserFirstnameProfile.setText(this.user.getFirstname());
+        //tvUserGroupProfile.setText(this.user.getGroup().getName());
     }
 
     @Override
@@ -93,17 +93,14 @@ public class ProfileActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_categories) {
+            Intent intent = new Intent(ProfileActivity.this, CategoryListActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_profile) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_help) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }else if (id == R.id.nav_logout) {
 
         }
 

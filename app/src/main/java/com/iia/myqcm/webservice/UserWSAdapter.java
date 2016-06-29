@@ -32,10 +32,13 @@ import java.util.List;
 public class UserWSAdapter {
 
     //private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
-    private static final String BASE_URL = "http://192.168.56.1/myQCM/web/app_dev.php/api";
+    private static final String BASE_URL = "http://192.168.1.89/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
+    private static final String POST = "post";
     private static final String VERSION = "1";
+    private static final String ID = "id";
     private static final String USERNAME = "username";
+    private static final String FIRSTNAME = "firstname";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private static final String CREATEDAT = "created_at";
@@ -73,6 +76,33 @@ public class UserWSAdapter {
     }
 
     /**
+     * Send username and password to the webservice
+     * @param username
+     * @param password
+     * @param responseHandler
+     */
+    public void post(String username, String password, AsyncHttpResponseHandler responseHandler){
+        RequestParams params = UserWSAdapter.itemToParams(username,password);
+
+        String url = String.format("%s/%s/%s", BASE_URL, ENTITY,POST);
+        client.post(url, params, responseHandler);
+    }
+
+    /**
+     * Create RequestParams with username and password
+     * @param username
+     * @param password
+     * @return
+     */
+    public static RequestParams itemToParams(String username, String password){
+        RequestParams params = new RequestParams();
+        params.put(USERNAME, username);
+        params.put(PASSWORD, password);
+
+        return params;
+    }
+
+    /**
      * Convert json to user and add in local database
      * @param json
      * @return User
@@ -82,6 +112,9 @@ public class UserWSAdapter {
         item.setUsername(json.optString(USERNAME));
         item.setEmail(json.optString(EMAIL));
         item.setPassword(json.optString(PASSWORD));
+        item.setIdServer(json.optInt(ID));
+        item.setName(json.optString(USERNAME));
+        item.setFirstname(json.optString(FIRSTNAME));
         //Recover qcmsUser
         JSONArray qcmsUserJsonArray = json.optJSONArray(USERQCMS);
         ArrayList<QcmUser> qcmsUserList = new ArrayList<>();
@@ -152,6 +185,7 @@ public class UserWSAdapter {
                         a.setCreated_at(date);
                         a.setUpdated_at(date);
                         a.setIdServer(answerObject.optLong("id"));
+                        a.setIs_selected(false);
 
                         a.setId(answerSQLiteAdapter.insert(a));
                     }

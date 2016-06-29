@@ -179,11 +179,9 @@ public class CategorySQLiteAdapter {
      * @param category
      * @return Content Values
      */
-    //CONVERT ITEM TO CONTENT VALUES
     private ContentValues itemToContentValues(Category category){
         ContentValues values = new ContentValues();
         values.put(COL_NAME, category.getName());
-        //DateFormat df = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         values.put(COL_CREATEDAT, category.getCreated_at().toString());
         values.put(COL_UPDATEDAT, category.getUpdated_at().toString());
         values.put(COL_IDSERVER, category.getIdServer());

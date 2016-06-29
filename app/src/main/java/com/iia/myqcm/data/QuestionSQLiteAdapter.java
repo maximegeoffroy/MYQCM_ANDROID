@@ -137,13 +137,40 @@ public class QuestionSQLiteAdapter {
     }
 
     /**
+     * Get question in database
+     * @param id
+     * @return Question
+     */
+    public Question getQuestionById(long id){
+        //SELECT
+        String[] cols = {COL_ID, COL_CONTENT, COL_CREATEDAT, COL_UPDATEDAT, COL_QCMID, COL_IDSERVER};
+
+        String whereClauses = COL_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
+
+        Cursor c = this.db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
+
+        Question resultQuestion = null;
+
+        if(c.getCount() > 0){
+            c.moveToFirst();
+
+            resultQuestion = this.cursorToItem(c);
+        }
+
+        c.close();
+
+        return resultQuestion;
+    }
+
+    /**
      * Get all cursor question by qcm
      * @param qcmId
      * @return Cursor
      */
     public Cursor getAllCursorByQcm(long qcmId){
         //SELECT
-        String[] cols = {COL_ID, COL_CONTENT, COL_CREATEDAT, COL_UPDATEDAT, COL_QCMID};
+        String[] cols = {COL_ID, COL_CONTENT, COL_CREATEDAT, COL_UPDATEDAT, COL_QCMID, COL_IDSERVER};
 
         String whereClauses = COL_QCMID + "= ?";
         String[] whereArgs = {String.valueOf(qcmId)};
@@ -218,13 +245,12 @@ public class QuestionSQLiteAdapter {
 
         //QCM
         long qcmId = c.getInt(c.getColumnIndex(COL_QCMID));
-
         QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(this.ctx);
         qcmSQLiteAdapter.open();
-
         resultQuestion.setQcm(qcmSQLiteAdapter.getQcm(qcmId));
-
         qcmSQLiteAdapter.close();
+
+        resultQuestion.setIdServer(c.getColumnIndex(COL_IDSERVER));
 
         return resultQuestion;
     }
