@@ -28,6 +28,11 @@ public class Group {
     protected Date updated_at;
 
     /**
+     *  Group idServer
+     */
+    protected long idServer;
+
+    /**
      * Get id
      * @return id
      */
@@ -85,5 +90,20 @@ public class Group {
      */
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
+    }
+
+    /**
+     * Get idServer
+     * @return idServer
+     */
+    public long getIdServer() {
+        return idServer;
+    }
+
+    /**
+     * Set idServer
+     */
+    public void setIdServer(long idServer) {
+        this.idServer = idServer;
     }
 }

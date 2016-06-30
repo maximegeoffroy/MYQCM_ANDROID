@@ -21,6 +21,7 @@ public class  GroupSQLiteAdapter {
     public static final String COL_NAME = "name";
     public static final String COL_CREATEDAT = "created_at";
     public static final String COL_UPDATEDAT = "updated_at";
+    public static final String COL_IDSERVER = "idServer";
 
     private SQLiteDatabase db;
     private MyqcmSQLiteOpenHelper helper;
@@ -40,7 +41,8 @@ public class  GroupSQLiteAdapter {
         return "CREATE TABLE "+ TABLE_GROUP + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_NAME + " TEXT NOT NULL,"
                 + COL_CREATEDAT + " DATE NOT NULL,"
-                + COL_UPDATEDAT + " DATE NOT NULL);";
+                + COL_UPDATEDAT + " DATE NOT NULL,"
+                + COL_IDSERVER + " INTEGER NOT NULL);";
     }
 
     /**
@@ -63,7 +65,13 @@ public class  GroupSQLiteAdapter {
      * @return group id
      */
     public long insert(Group group){
-        return db.insert(TABLE_GROUP, null, this.itemToContentValues(group));
+        long id = 0;
+        if (this.getGroup(group.getIdServer()) != null) {
+            id = this.getGroup(group.getIdServer()).getId();
+        }else{
+            id = db.insert(TABLE_GROUP, null, this.itemToContentValues(group));
+        }
+        return id;
     }
 
     /**
@@ -96,15 +104,15 @@ public class  GroupSQLiteAdapter {
 
     /**
      * Get group in database
-     * @param id
+     * @param idServer
      * @return Group
      */
-    public Group getGroup(long id){
+    public Group getGroup(long idServer){
         //SELECT
-        String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT};
+        String[] cols = {COL_ID, COL_NAME, COL_CREATEDAT, COL_UPDATEDAT, COL_IDSERVER};
 
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+        String whereClauses = COL_IDSERVER + "= ?";
+        String[] whereArgs = {String.valueOf(idServer)};
 
         Cursor c = this.db.query(TABLE_GROUP, cols, whereClauses, whereArgs, null, null, null);
 
@@ -147,6 +155,11 @@ public class  GroupSQLiteAdapter {
             e.printStackTrace();
         }
 
+        /**
+         * IDSERVER
+         */
+        resultGroup.setIdServer(c.getLong(c.getColumnIndex(COL_IDSERVER)));
+
         return resultGroup;
     }
 
@@ -161,6 +174,7 @@ public class  GroupSQLiteAdapter {
         values.put(COL_NAME, group.getName());
         values.put(COL_CREATEDAT, group.getCreated_at().toString());
         values.put(COL_UPDATEDAT, group.getUpdated_at().toString());
+        values.put(COL_IDSERVER, group.getIdServer());
 
         return values;
     }

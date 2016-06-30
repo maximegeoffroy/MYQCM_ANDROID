@@ -49,6 +49,7 @@ public class CategoryListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CATEGORY_ID = "id";
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,11 @@ public class CategoryListActivity extends AppCompatActivity
 
         Bundle bundle = this.getIntent().getExtras();
         //userId = bundle.getLong(ConnexionActivity.USER_ID);
+
+        sharedpreferences = getSharedPreferences(ConnexionActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        long userId = sharedpreferences.getLong(ConnexionActivity.USERID,0);
+
+        Toast.makeText(CategoryListActivity.this,String.valueOf(userId) , Toast.LENGTH_LONG).show();
 
         //CODE NAVIGATION VIEW
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

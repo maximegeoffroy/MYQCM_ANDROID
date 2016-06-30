@@ -54,7 +54,8 @@ public class UserSQLiteAdapter {
                 + COL_EMAIL + " TEXT NOT NULL,"
                 + COL_CREATEDAT  + " DATE NOT NULL,"
                 + COL_UPDATEDAT + " DATE NOT NULL,"
-                + COL_IDSERVER + " INTEGER NOT NULL);";
+                + COL_IDSERVER + " INTEGER NOT NULL,"
+                + COL_GROUPID + " INTEGER);";
     }
 
     /**
@@ -126,7 +127,7 @@ public class UserSQLiteAdapter {
     public User getUser(long idServer){
         //SELECT
         String[] cols = {COL_ID, COL_USERNAME,COL_PASSWORD, COL_NAME, COL_FIRSTNAME, COL_EMAIL, COL_CREATEDAT,
-                COL_UPDATEDAT,COL_IDSERVER};
+                COL_UPDATEDAT,COL_IDSERVER, COL_GROUPID};
 
         String whereClauses = COL_IDSERVER + "= ?";
         String[] whereArgs = {String.valueOf(idServer)};
@@ -207,11 +208,13 @@ public class UserSQLiteAdapter {
 
         resultUser.setIdServer(c.getLong(c.getColumnIndex(COL_IDSERVER)));
 
-        //RECUPERE LE GROUPE
-        //GroupSQLiteAdapter groupSQLiteAdapter = new GroupSQLiteAdapter(ctx);
-        //groupSQLiteAdapter.open();
-        //resultUser.setGroup(groupSQLiteAdapter.getGroup(c.getInt(c.getColumnIndex(COL_GROUPID))));
-        //groupSQLiteAdapter.close();
+        /**
+         * Group
+         */
+        GroupSQLiteAdapter groupSQLiteAdapter = new GroupSQLiteAdapter(ctx);
+        groupSQLiteAdapter.open();
+        resultUser.setGroup(groupSQLiteAdapter.getGroup(c.getInt(c.getColumnIndex(COL_GROUPID))));
+        groupSQLiteAdapter.close();
 
         return resultUser;
     }
@@ -233,7 +236,7 @@ public class UserSQLiteAdapter {
         values.put(COL_CREATEDAT, d.toString());
         values.put(COL_UPDATEDAT, d.toString());
         values.put(COL_IDSERVER, user.getIdServer());
-        //values.put(COL_GROUPID, user.getGroup().getId());
+        values.put(COL_GROUPID, user.getGroup().getId());
 
         return values;
     }

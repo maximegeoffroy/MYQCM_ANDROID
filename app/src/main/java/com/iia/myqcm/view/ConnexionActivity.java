@@ -92,12 +92,11 @@ public class ConnexionActivity extends AppCompatActivity {
                             userSQLiteAdapter.close();
 
                             /**
-                             *
+                             * Put in preferences user id
                              */
                             SharedPreferences.Editor editor = sharedpreferences.edit();
-
                             editor.putLong(USERID, id);
-                            editor.commit();
+                            editor.apply();
 
                             /**
                              * If progressDialog showing, close this
@@ -111,9 +110,6 @@ public class ConnexionActivity extends AppCompatActivity {
                              * Open categoryListActivity
                              */
                             Intent intent = new Intent(ConnexionActivity.this, CategoryListActivity.class);
-                            Bundle bundle = new Bundle();
-                            //bundle.putSerializable(USER_ID, id);
-                            //intent.putExtras(bundle);
                             startActivity(intent);
                         }
 

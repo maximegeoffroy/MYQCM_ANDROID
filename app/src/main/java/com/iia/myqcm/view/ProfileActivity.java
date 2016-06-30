@@ -1,5 +1,6 @@
 package com.iia.myqcm.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iia.myqcm.R;
 import com.iia.myqcm.data.UserSQLiteAdapter;
@@ -24,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private User user;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +48,17 @@ public class ProfileActivity extends AppCompatActivity
         TextView tvUserFirstnameProfile = (TextView)this.findViewById(R.id.tvUserFirstnameProfile);
         TextView tvUserGroupProfile = (TextView)this.findViewById(R.id.tvUserGroupProfile);
 
-        //UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
-        //userSQLiteAdapter.open();
-        //this.user = userSQLiteAdapter.getUser(userId);
-        //userSQLiteAdapter.close();
+        sharedpreferences = getSharedPreferences(ConnexionActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        long userId = sharedpreferences.getLong(ConnexionActivity.USERID,0);
 
-        //tvUserNameProfile.setText(this.user.getName());
-        //tvUserFirstnameProfile.setText(this.user.getFirstname());
-        //tvUserGroupProfile.setText(this.user.getGroup().getName());
+        UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(this);
+        userSQLiteAdapter.open();
+        this.user = userSQLiteAdapter.getUser(userId);
+        userSQLiteAdapter.close();
+
+        tvUserNameProfile.setText(this.user.getName());
+        tvUserFirstnameProfile.setText(this.user.getFirstname());
+        tvUserGroupProfile.setText(this.user.getGroup().getName());
     }
 
     @Override

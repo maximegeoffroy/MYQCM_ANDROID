@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.iia.myqcm.data.AnswerSQLiteAdapter;
 import com.iia.myqcm.data.CategorySQLiteAdapter;
+import com.iia.myqcm.data.GroupSQLiteAdapter;
 import com.iia.myqcm.data.QcmSQLiteAdapter;
 import com.iia.myqcm.data.QuestionSQLiteAdapter;
 import com.iia.myqcm.entity.Answer;
 import com.iia.myqcm.entity.Category;
+import com.iia.myqcm.entity.Group;
 import com.iia.myqcm.entity.Qcm;
 import com.iia.myqcm.entity.QcmUser;
 import com.iia.myqcm.entity.Question;
@@ -31,19 +33,21 @@ import java.util.List;
  */
 public class UserWSAdapter {
 
-    //private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
-    private static final String BASE_URL = "http://192.168.1.89/myQCM/web/app_dev.php/api";
+    private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
+    //private static final String BASE_URL = "http://192.168.1.89/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
     private static final String POST = "post";
     private static final String VERSION = "1";
     private static final String ID = "id";
     private static final String USERNAME = "username";
+    private static final String NAME = "name";
     private static final String FIRSTNAME = "firstname";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private static final String CREATEDAT = "created_at";
     private static final String UPDATEDAT = "updated_at";
     private static final String USERQCMS = "user_qcms";
+    private static final String USERGROUP = "user_group";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
     private Context ctx;
@@ -115,16 +119,40 @@ public class UserWSAdapter {
         item.setIdServer(json.optInt(ID));
         item.setName(json.optString(USERNAME));
         item.setFirstname(json.optString(FIRSTNAME));
-        //Recover qcmsUser
+
+        /**
+         * Group
+         */
+        Date date = new Date();
+        try {
+            JSONObject userGroup = json.getJSONObject(USERGROUP);
+            Group group = new Group();
+            group.setIdServer(userGroup.optLong(ID));
+            group.setName(userGroup.optString(NAME));
+            group.setCreated_at(date);
+            group.setUpdated_at(date);
+
+            GroupSQLiteAdapter groupSQLiteAdapter = new GroupSQLiteAdapter(this.ctx);
+            groupSQLiteAdapter.open();
+            group.setId(groupSQLiteAdapter.insert(group));
+            groupSQLiteAdapter.close();
+
+            item.setGroup(group);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         JSONArray qcmsUserJsonArray = json.optJSONArray(USERQCMS);
         ArrayList<QcmUser> qcmsUserList = new ArrayList<>();
-        Date date = new Date();
         for (int i = 0; i < qcmsUserJsonArray.length(); i++) {
             try {
                 JSONObject qcmsUserObject = qcmsUserJsonArray.getJSONObject(i);
                 JSONObject qcmObject = qcmsUserObject.optJSONObject("qcm");
 
-                //Category
+                /**
+                 * Category
+                 */
                 Category category = new Category();
                 category.setName(qcmObject.optJSONObject("category").optString("name"));
                 category.setCreated_at(date);
@@ -138,7 +166,9 @@ public class UserWSAdapter {
 
                 categoryAdapter.close();
 
-                //QCM
+                /**
+                 * Qcm
+                 */
                 Qcm qcm = new Qcm();
                 qcm.setCategory(category);
                 qcm.setDuration(qcmObject.optInt("duration"));
@@ -193,7 +223,9 @@ public class UserWSAdapter {
                 }
                 questionSQLiteAdapter.close();
 
-                //qcmsUser
+                /**
+                 * QCM User
+                 */
                 QcmUser qcmUser = new QcmUser();
                 qcmUser.setQcm(qcm);
                 qcmUser.setUser(item);
