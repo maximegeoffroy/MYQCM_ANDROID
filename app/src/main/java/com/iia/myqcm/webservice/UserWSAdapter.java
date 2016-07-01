@@ -36,7 +36,7 @@ public class UserWSAdapter {
     private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
     //private static final String BASE_URL = "http://192.168.1.89/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
-    private static final String POST = "post";
+    private static final String AUTH = "auth";
     private static final String VERSION = "1";
     private static final String ID = "id";
     private static final String USERNAME = "username";
@@ -71,6 +71,18 @@ public class UserWSAdapter {
     }
 
     /**
+     * Send username and password to the webservice
+     * @param user
+     * @param handler
+     */
+    public void auth(User user, AsyncHttpResponseHandler handler){
+        RequestParams params = UserWSAdapter.itemToParams(user);
+
+        String url = String.format("%s/%s", BASE_URL, AUTH);
+        client.post(url, params, handler);
+    }
+
+    /**
      * Get all users in webservice database
      * @param responseHandler
      */
@@ -80,28 +92,14 @@ public class UserWSAdapter {
     }
 
     /**
-     * Send username and password to the webservice
-     * @param username
-     * @param password
-     * @param responseHandler
+     * Create RequestParams with username and password of user
+     * @param user
+     * @return params
      */
-    public void post(String username, String password, AsyncHttpResponseHandler responseHandler){
-        RequestParams params = UserWSAdapter.itemToParams(username,password);
-
-        String url = String.format("%s/%s/%s", BASE_URL, ENTITY,POST);
-        client.post(url, params, responseHandler);
-    }
-
-    /**
-     * Create RequestParams with username and password
-     * @param username
-     * @param password
-     * @return
-     */
-    public static RequestParams itemToParams(String username, String password){
+    public static RequestParams itemToParams(User user){
         RequestParams params = new RequestParams();
-        params.put(USERNAME, username);
-        params.put(PASSWORD, password);
+        params.put(USERNAME, user.getUsername());
+        params.put(PASSWORD, user.getPassword());
 
         return params;
     }

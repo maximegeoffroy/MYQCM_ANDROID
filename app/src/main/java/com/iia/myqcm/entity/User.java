@@ -230,4 +230,20 @@ public class User implements Serializable {
     public void setIdServer(long idServer) {
         this.idServer = idServer;
     }
+
+    /**
+     * Constructor of user with username and password
+     * @param username
+     * @param password
+     */
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    /**
+     * Constructor of user
+     */
+    public User() {
+    }
 }

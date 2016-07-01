@@ -43,7 +43,7 @@ import cz.msebera.android.httpclient.Header;
 public class ConnexionActivity extends AppCompatActivity {
 
     public static final String ID = "id";
-    public static final String CONNECTED = "Connecté";
+    public static final String INVALID_USER = "Vérifier les informations de connexion";
     public static final String ERROR_CONNEXION = "Erreur de connexion";
     public static final String ERROR_USER = "Erreur sur l'utilisateur";
     public static final String LOADING = "Connexion";
@@ -73,6 +73,13 @@ public class ConnexionActivity extends AppCompatActivity {
         btConnexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (etUsername.getText().toString().equals("") || etPassword.getText().toString().equals("")) {
+                    Toast.makeText(ConnexionActivity.this, INVALID_USER, Toast.LENGTH_LONG).show();
+                } else {
+
+                    User user = new User(etUsername.getText().toString(),etPassword.getText().toString());
+
                     final UserWSAdapter userWSAdapter = new UserWSAdapter(ConnexionActivity.this);
 
                     /**
@@ -82,36 +89,48 @@ public class ConnexionActivity extends AppCompatActivity {
                     progressDialog.setMessage(ConnexionActivity.LOADING);
                     progressDialog.show();
 
-                    userWSAdapter.getUser(etUsername.getText().toString(), new JsonHttpResponseHandler() {
+                    userWSAdapter.auth(user, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            User item = userWSAdapter.jsonToItem(response);
-                            UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(ConnexionActivity.this);
-                            userSQLiteAdapter.open();
-                            long id = userSQLiteAdapter.insert(item);
-                            userSQLiteAdapter.close();
+                            if(response.length() != 0) {
+                                User item = userWSAdapter.jsonToItem(response);
+                                UserSQLiteAdapter userSQLiteAdapter = new UserSQLiteAdapter(ConnexionActivity.this);
+                                userSQLiteAdapter.open();
+                                long id = userSQLiteAdapter.insert(item);
+                                userSQLiteAdapter.close();
 
-                            /**
-                             * Put in preferences user id
-                             */
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putLong(USERID, id);
-                            editor.apply();
+                                /**
+                                 * Put in preferences user id
+                                 */
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putLong(USERID, id);
+                                editor.apply();
 
-                            /**
-                             * If progressDialog showing, close this
-                             */
-                            if (progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                                progressDialog = null;
+                                /**
+                                 * If progressDialog showing, close this
+                                 */
+                                if (progressDialog.isShowing()) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+
+                                /**
+                                 * Open categoryListActivity
+                                 */
+                                Intent intent = new Intent(ConnexionActivity.this, CategoryListActivity.class);
+                                startActivity(intent);
+                            }else{
+                                /**
+                                 * If progressDialog showing, close this
+                                 */
+                                if (progressDialog.isShowing()) {
+                                    progressDialog.dismiss();
+                                    progressDialog = null;
+                                }
+                                Toast.makeText(ConnexionActivity.this, ConnexionActivity.ERROR_USER, Toast.LENGTH_LONG).show();
                             }
-
-                            /**
-                             * Open categoryListActivity
-                             */
-                            Intent intent = new Intent(ConnexionActivity.this, CategoryListActivity.class);
-                            startActivity(intent);
                         }
+
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -124,6 +143,7 @@ public class ConnexionActivity extends AppCompatActivity {
                             }
                         }
                     });
+                }
             }
         });
     }
