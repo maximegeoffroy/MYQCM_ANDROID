@@ -119,6 +119,7 @@ public class ConnexionActivity extends AppCompatActivity {
                                  */
                                 Intent intent = new Intent(ConnexionActivity.this, CategoryListActivity.class);
                                 startActivity(intent);
+                                ConnexionActivity.this.finish();
                             }else{
                                 /**
                                  * If progressDialog showing, close this

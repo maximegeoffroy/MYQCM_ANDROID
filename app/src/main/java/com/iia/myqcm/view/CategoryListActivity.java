@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -58,15 +59,9 @@ public class CategoryListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle bundle = this.getIntent().getExtras();
-        //userId = bundle.getLong(ConnexionActivity.USER_ID);
-
         sharedpreferences = getSharedPreferences(ConnexionActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         long userId = sharedpreferences.getLong(ConnexionActivity.USERID,0);
 
-        Toast.makeText(CategoryListActivity.this,String.valueOf(userId) , Toast.LENGTH_LONG).show();
-
-        //CODE NAVIGATION VIEW
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -144,9 +139,15 @@ public class CategoryListActivity extends AppCompatActivity
             Intent intent = new Intent(CategoryListActivity.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_help) {
-
+            String url = UserWSAdapter.IP + "Documentation";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         }else if (id == R.id.nav_logout) {
-
+            getSharedPreferences(ConnexionActivity.MyPREFERENCES, 0).edit().clear().apply();
+            Intent i = new Intent(CategoryListActivity.this, ConnexionActivity.class);
+            this.finish();
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

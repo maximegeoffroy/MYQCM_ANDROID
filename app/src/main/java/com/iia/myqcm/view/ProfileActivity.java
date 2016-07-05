@@ -3,6 +3,7 @@ package com.iia.myqcm.view;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.iia.myqcm.R;
 import com.iia.myqcm.data.UserSQLiteAdapter;
 import com.iia.myqcm.entity.User;
+import com.iia.myqcm.webservice.UserWSAdapter;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,11 +105,18 @@ public class ProfileActivity extends AppCompatActivity
             Intent intent = new Intent(ProfileActivity.this, CategoryListActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_profile) {
-            // Handle the camera action
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_help) {
-
+            String url = UserWSAdapter.IP + "Documentation";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         }else if (id == R.id.nav_logout) {
-
+            getSharedPreferences(ConnexionActivity.MyPREFERENCES, 0).edit().clear().apply();
+            Intent i = new Intent(ProfileActivity.this, ConnexionActivity.class);
+            this.finish();
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

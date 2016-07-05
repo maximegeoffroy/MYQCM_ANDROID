@@ -33,10 +33,12 @@ import java.util.List;
  */
 public class UserWSAdapter {
 
-    private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
-    //private static final String BASE_URL = "http://192.168.1.89/myQCM/web/app_dev.php/api";
+    //private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
+    public static final String IP = "http://192.168.1.88/";
+    private static final String BASE_URL = IP + "/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
     private static final String AUTH = "auth";
+    private static final String UPDATE_QCM = "update_qcm";
     private static final String VERSION = "1";
     private static final String ID = "id";
     private static final String USERNAME = "username";
@@ -102,6 +104,27 @@ public class UserWSAdapter {
         params.put(PASSWORD, user.getPassword());
 
         return params;
+    }
+
+    /**
+     * Convert DataObject to Params.
+     * @param idQcm
+     * @param idUser
+     * @param note
+     * @return RequestParams
+     */
+    public RequestParams itemToParamsPostQcm(long idQcm, long idUser, float note){
+        RequestParams params = new RequestParams();
+        params.put("id_qcm", idQcm);
+        params.put("id_user", idUser);
+        params.put("note", note);
+
+        return params;
+    }
+
+    public void postQcm(RequestParams params, AsyncHttpResponseHandler handler){
+        String url = String.format("%s/%s", BASE_URL, UPDATE_QCM);
+        client.post(url, params, handler);
     }
 
     /**

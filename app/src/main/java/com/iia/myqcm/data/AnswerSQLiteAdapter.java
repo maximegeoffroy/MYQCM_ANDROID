@@ -119,7 +119,7 @@ public class AnswerSQLiteAdapter {
      */
     public Answer getAnswer(long idServer){
         //SELECT
-        String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID};
+        String[] cols = {COL_ID, COL_CONTENT, COL_POINT, COL_ISVALID, COL_CREATEDAT, COL_UPDATEDAT, COL_QUESTIONID, COL_IDSERVER, COL_ISSELECTED};
 
         String whereClauses = COL_IDSERVER + "= ?";
         String[] whereArgs = {String.valueOf(idServer)};
@@ -192,12 +192,24 @@ public class AnswerSQLiteAdapter {
         resultAnswer.setContent(c.getString(c.getColumnIndex(COL_CONTENT)));
         resultAnswer.setPoint(c.getInt(c.getColumnIndex(COL_POINT)));
 
-        // IS VALID
+        /**
+         * Is valid
+         */
         int isValid = c.getInt(c.getColumnIndex(COL_ISVALID));
         if(isValid == 0){
             resultAnswer.setIs_valid(false);
         }else{
             resultAnswer.setIs_valid(true);
+        }
+
+        /**
+         * Is selected
+         */
+        int isSelected = c.getInt(c.getColumnIndex(COL_ISSELECTED));
+        if(isSelected == 0){
+            resultAnswer.setIs_selected(false);
+        }else{
+            resultAnswer.setIs_selected(true);
         }
 
         //DATE CREATED AT
@@ -214,6 +226,11 @@ public class AnswerSQLiteAdapter {
         resultAnswer.setQuestion(questionSQLiteAdapter.getQuestionById(questionId));
 
         questionSQLiteAdapter.close();
+
+        /**
+         * ID SERVER
+         */
+        resultAnswer.setIdServer(c.getLong(c.getColumnIndex(COL_IDSERVER)));
 
         return resultAnswer;
     }

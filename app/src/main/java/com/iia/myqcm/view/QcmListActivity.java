@@ -2,6 +2,7 @@ package com.iia.myqcm.view;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,7 @@ import com.iia.myqcm.data.CategorySQLiteAdapter;
 import com.iia.myqcm.data.QcmSQLiteAdapter;
 import com.iia.myqcm.entity.Category;
 import com.iia.myqcm.entity.Qcm;
+import com.iia.myqcm.webservice.UserWSAdapter;
 
 public class QcmListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,9 +95,15 @@ public class QcmListActivity extends AppCompatActivity
         }else if (id == R.id.nav_profile) {
             // Handle the camera action
         } else if (id == R.id.nav_help) {
-
+            String url = UserWSAdapter.IP +"Documentation";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         }else if (id == R.id.nav_logout) {
-
+            getSharedPreferences(ConnexionActivity.MyPREFERENCES, 0).edit().clear().apply();
+            Intent i = new Intent(QcmListActivity.this, ConnexionActivity.class);
+            this.finish();
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
