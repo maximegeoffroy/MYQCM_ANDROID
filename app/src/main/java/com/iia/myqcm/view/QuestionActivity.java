@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import com.iia.myqcm.R;
 import com.iia.myqcm.data.AnswerSQLiteAdapter;
+import com.iia.myqcm.data.QcmSQLiteAdapter;
 import com.iia.myqcm.data.QuestionSQLiteAdapter;
 import com.iia.myqcm.entity.Answer;
+import com.iia.myqcm.entity.Qcm;
 import com.iia.myqcm.entity.Question;
 import com.iia.myqcm.webservice.UserWSAdapter;
 import com.loopj.android.http.RequestParams;
@@ -159,7 +161,7 @@ public class QuestionActivity extends AppCompatActivity {
         ArrayList<Answer> answers = answerSQLiteAdapter.getAllByQuestion(q.getId());
         answerSQLiteAdapter.close();
 
-        tvQcmName.setText(q.getQcm().getCategory().getName());
+        //tvQcmName.setText(q.getQcm().getCategory().getName());
         tvContentQuestion.setText(q.getContent());
 
         for (final Answer a : answers) {
@@ -240,6 +242,11 @@ public class QuestionActivity extends AppCompatActivity {
 
         final float note = calculateNote(qcmId);
 
+        //QcmSQLiteAdapter qcmSQLiteAdapter = new QcmSQLiteAdapter(this);
+        //qcmSQLiteAdapter.open();
+        //Qcm q = qcmSQLiteAdapter.getQcmById(qcmId);
+        //qcmSQLiteAdapter.close();
+
         sharedpreferences = getSharedPreferences(ConnexionActivity.MyPREFERENCES, MODE_PRIVATE);
         long userId = sharedpreferences.getLong(ConnexionActivity.USERID,0);
 
@@ -253,7 +260,9 @@ public class QuestionActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
 
-                Toast.makeText(QuestionActivity.this, "ERREUR ENVOI JSON", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(QuestionActivity.this, EndPageActivity.class);
+                QuestionActivity.this.finish();
+                startActivity(intent);
             }
 
             @Override

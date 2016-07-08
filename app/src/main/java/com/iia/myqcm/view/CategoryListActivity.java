@@ -139,7 +139,7 @@ public class CategoryListActivity extends AppCompatActivity
             Intent intent = new Intent(CategoryListActivity.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_help) {
-            String url = UserWSAdapter.IP + "Documentation";
+            String url = UserWSAdapter.IP + "/Documentation";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);

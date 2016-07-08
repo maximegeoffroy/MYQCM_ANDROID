@@ -89,12 +89,39 @@ public class QcmSQLiteAdapter {
 
     /**
      * Get qcm in database
+     * @param id
+     * @return Qcm
+     */
+    public Qcm getQcmById(long id){
+        //SELECT
+        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID, COL_IDSERVER};
+
+        String whereClauses = COL_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
+
+        Cursor c = db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
+
+        Qcm resultQcm = null;
+
+        if(c.getCount() > 0){
+            c.moveToFirst();
+
+            resultQcm = this.cursorToItem(c);
+        }
+
+        c.close();
+
+        return resultQcm;
+    }
+
+    /**
+     * Get qcm in database
      * @param idServer
      * @return Qcm
      */
     public Qcm getQcm(long idServer){
         //SELECT
-        String[] cols = {COL_ID, COL_NAME, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID};
+        String[] cols = {COL_ID, COL_NAME, COL_DURATION, COL_STARTAT, COL_ENDAT, COL_CREATEDAT, COL_UPDATEDAT, COL_CATEGORYID, COL_IDSERVER};
 
         String whereClauses = COL_IDSERVER + "= ?";
         String[] whereArgs = {String.valueOf(idServer)};
@@ -182,7 +209,8 @@ public class QcmSQLiteAdapter {
         resultQcm.setId(c.getInt(c.getColumnIndex(COL_ID)));
         resultQcm.setName(c.getString(c.getColumnIndex(COL_NAME)));
 
-        //DATE START AT
+        //resultQcm.setDuration(c.getInt(c.getColumnIndex(COL_DURATION)));
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String dateStartAt = c.getString(c.getColumnIndex(COL_STARTAT));
         try {
@@ -191,7 +219,6 @@ public class QcmSQLiteAdapter {
             e.printStackTrace();
         }
 
-        //DATE END AT
         String dateEndAt = c.getString(c.getColumnIndex(COL_UPDATEDAT));
         try {
             resultQcm.setEnd_date(dateFormat.parse(dateEndAt));
@@ -199,7 +226,6 @@ public class QcmSQLiteAdapter {
             e.printStackTrace();
         }
 
-        //DATE CREATED AT
         String dateCreatedAt = c.getString(c.getColumnIndex(COL_CREATEDAT));
         try {
             resultQcm.setCreated_at(dateFormat.parse(dateCreatedAt));
@@ -207,7 +233,6 @@ public class QcmSQLiteAdapter {
             e.printStackTrace();
         }
 
-        //DATE UPDATED AT
         String dateUpdatedAt = c.getString(c.getColumnIndex(COL_UPDATEDAT));
         try {
             resultQcm.setUpdated_at(dateFormat.parse(dateUpdatedAt));
@@ -215,7 +240,6 @@ public class QcmSQLiteAdapter {
             e.printStackTrace();
         }
 
-        //CATEGORIE
         long categoryId = c.getInt(c.getColumnIndex(COL_CATEGORYID));
 
         CategorySQLiteAdapter categorySQLiteAdapter = new CategorySQLiteAdapter(this.ctx);
@@ -224,6 +248,8 @@ public class QcmSQLiteAdapter {
         resultQcm.setCategory(categorySQLiteAdapter.getCategory(categoryId));
 
         categorySQLiteAdapter.close();
+
+        //resultQcm.setIdServer(c.getInt(c.getColumnIndex(COL_IDSERVER)));
 
         return resultQcm;
     }

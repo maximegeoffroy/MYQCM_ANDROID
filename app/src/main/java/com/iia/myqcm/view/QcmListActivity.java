@@ -93,9 +93,10 @@ public class QcmListActivity extends AppCompatActivity
             Intent intent = new Intent(QcmListActivity.this, CategoryListActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_profile) {
-            // Handle the camera action
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_help) {
-            String url = UserWSAdapter.IP +"Documentation";
+            String url = UserWSAdapter.IP +"/Documentation";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
@@ -131,8 +132,6 @@ public class QcmListActivity extends AppCompatActivity
 
             Bundle bundle = this.ctx.getIntent().getExtras();
             long categoryId = bundle.getLong(CategoryListActivity.CATEGORY_ID);
-
-            //Qcm q = qcmSQLiteAdapter.getQcmByCategory(categoryId);
 
             return qcmSQLiteAdapter.getAllCursorByCategory(categoryId);
         }

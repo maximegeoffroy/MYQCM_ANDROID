@@ -34,7 +34,7 @@ import java.util.List;
 public class UserWSAdapter {
 
     //private static final String BASE_URL = "http://172.20.10.2/myQCM/web/app_dev.php/api";
-    public static final String IP = "http://192.168.1.88/";
+    public static final String IP = "http://172.20.10.2";
     private static final String BASE_URL = IP + "/myQCM/web/app_dev.php/api";
     private static final String ENTITY = "users";
     private static final String AUTH = "auth";
